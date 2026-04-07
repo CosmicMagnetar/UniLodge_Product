@@ -1,0 +1,26 @@
+{
+  "name": "unilodge",
+  "version": "1.0.0",
+  "description": "Modern Student Accommodation Platform",
+  "private": true,
+  "scripts": {
+    "dev:frontend": "npm run dev --workspace=apps/frontend",
+    "dev:backend": "npm run dev --workspace=apps/backend",
+    "dev:ai": "npm run dev --workspace=apps/ai-engine",
+    "dev": "npm run --workspaces --parallel dev",
+    "build": "npm run --workspaces build",
+    "test": "npm run --workspaces test",
+    "lint": "npm run --workspaces lint"
+  },
+  "workspaces": [
+    "apps/frontend",
+    "apps/backend",
+    "apps/ai-engine",
+    "packages/shared"
+  ],
+  "devDependencies": {
+    "typescript": "^5.3.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0"
+  }
+}
