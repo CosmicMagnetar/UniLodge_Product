@@ -1,0 +1,56 @@
+# GitHub Language Detection Optimization
+# This file tells GitHub how to categorize files for the language bar
+
+# === Documentation Files ===
+*.md linguist-documentation
+*.mdx linguist-documentation
+docs/** linguist-documentation
+*.txt linguist-documentation
+
+# === Configuration Files ===
+*.json linguist-data
+*.yml linguist-data
+*.yaml linguist-data
+*.toml linguist-data
+*.env* linguist-data
+Dockerfile linguist-data
+docker-compose.yml linguist-data
+.gitignore linguist-data
+.gitattributes linguist-data
+
+# === Vendor & Generated Code ===
+node_modules/** linguist-vendored
+dist/** linguist-vendored
+build/** linguist-vendored
+.next/** linguist-vendored
+out/** linguist-vendored
+
+# === Test Files (Lower Priority) ===
+tests/** -linguist-detectable
+**/*.test.ts -linguist-detectable
+**/*.spec.ts -linguist-detectable
+vitest.config.ts -linguist-detectable
+jest.config.js -linguist-detectable
+
+# === Lock Files ===
+package-lock.json linguist-vendored
+pnpm-lock.yaml linguist-vendored
+yarn.lock linguist-vendored
+
+# === Database & Migration Files ===
+migrations/** linguist-data
+seeds/** linguist-data
+*.sql linguist-data
+
+# === TypeScript & JavaScript as Primary ===
+*.ts linguist-language=TypeScript
+*.tsx linguist-language=TypeScript
+*.js linguist-language=JavaScript
+*.jsx linguist-language=JavaScript
+
+# === Explicitly mark CSS/SCSS ===
+*.css linguist-language=CSS
+*.scss linguist-language=CSS
+
+# === GitHub Workflows ===
+.github/** linguist-vendored
