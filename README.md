@@ -7,7 +7,7 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen.svg)]()
 
-🏠 **Modern, Intelligent Housing Platform** | 🤖 **AI-Powered Insights** | 📊 **Real-time Analytics**
+[BUILDING] Modern, Intelligent Housing Platform | [AI] AI-Powered Insights | [CHART] Real-time Analytics
 
 [Demo](https://unilodge.example.com) · [Documentation](./docs/README.md) · [API Docs](./docs/API_REFERENCE.md) · [Contributing](./CONTRIBUTING.md)
 
@@ -15,7 +15,7 @@
 
 ---
 
-## 📋 Table of Contents
+## [LIST] Table of Contents
 
 - [Overview](#overview)
 - [Key Features](#key-features)
@@ -30,7 +30,7 @@
 
 ---
 
-## 🎯 Overview
+## [TARGET] Overview
 
 **UniLodge** is a next-generation campus accommodation platform that leverages AI and machine learning to provide intelligent room recommendations, dynamic pricing, and intelligent customer support.
 
@@ -43,31 +43,31 @@ Built with a modern microservices architecture, UniLodge demonstrates best pract
 
 ### Why UniLodge?
 
-- ✅ **AI-Powered**: Machine learning-driven price optimization and recommendations
-- ✅ **Type-Safe**: Full TypeScript with branded types for compile-time safety
-- ✅ **Scalable**: Microservices architecture supporting monorepo with Nx
-- ✅ **Secure**: Row-Level Security (RLS) and JWT authentication
-- ✅ **Developer-Friendly**: Clear domain structure and comprehensive documentation
+- [CHECK] **AI-Powered**: Machine learning-driven price optimization and recommendations
+- [CHECK] **Type-Safe**: Full TypeScript with branded types for compile-time safety
+- [CHECK] **Scalable**: Microservices architecture supporting monorepo with Nx
+- [CHECK] **Secure**: Row-Level Security (RLS) and JWT authentication
+- [CHECK] **Developer-Friendly**: Clear domain structure and comprehensive documentation
 
 ---
 
-## ✨ Key Features
+## [SPARKLE] Key Features
 
-### 🎓 For Students & Guests
+### [GRADUATION] For Students & Guests
 - **Smart Room Discovery**: AI recommendations based on preferences and budget
 - **Real-time Availability**: Live occupancy and pricing data
 - **Instant Chat Support**: 24/7 AI-powered assistant
 - **Transparent Pricing**: No hidden fees, AI-suggested fair prices
 - **Reviews & Ratings**: Community-driven insights
 
-### 🏢 For Property Managers
+### [OFFICE] For Property Managers
 - **Dynamic Pricing**: AI suggests optimal prices based on demand
 - **Occupancy Analytics**: Real-time insights into booking patterns
 - **Automated Notifications**: System alerts for important events
 - **Customer Management**: Centralized booking and messaging
 - **Revenue Optimization**: Data-driven pricing strategies
 
-### 🔐 For Administrators
+### [LOCK] For Administrators
 - **Multi-role Access Control**: RBAC with RLS at database level
 - **Audit Trails**: Complete activity logging
 - **Bulk Management**: Tools for managing multiple properties
@@ -76,7 +76,7 @@ Built with a modern microservices architecture, UniLodge demonstrates best pract
 
 ---
 
-## 🛠️ Tech Stack
+## [TOOLS] Tech Stack
 
 ### Frontend
 | Technology | Purpose |
@@ -115,7 +115,7 @@ Built with a modern microservices architecture, UniLodge demonstrates best pract
 
 ---
 
-## 🏗️ Architecture
+## [BUILDING] Architecture
 
 ### System Architecture
 
@@ -203,7 +203,7 @@ src/
 
 ---
 
-## 🤖 AI Capabilities
+## [AI] AI Capabilities
 
 ### 1. Intelligent Price Suggestion Engine
 
@@ -235,10 +235,10 @@ const suggestion = await aiService.suggestPrice(roomId);
 6. Returns confidence score with reasoning
 
 **Benefits**:
-- ✅ Revenue optimization (+15-25% average increase)
-- ✅ Competitive positioning
-- ✅ Real-time adaptation to market changes
-- ✅ Reduced manual pricing decisions
+- [CHECK] Revenue optimization (+15-25% average increase)
+- [CHECK] Competitive positioning
+- [CHECK] Real-time adaptation to market changes
+- [CHECK] Reduced manual pricing decisions
 
 ### 2. AI Chat Assistant
 
@@ -299,13 +299,13 @@ Generate More Accurate Response
 type PricePrediction = number & { __brand: 'PricePrediction' };
 type ConfidenceScore = number & { __brand: 'ConfidenceScore' };
 
-const price = createPricePrediction(89.99);      // ✅ Type safe
-const confidence = createConfidenceScore(0.92);  // ✅ Validated
+const price = createPricePrediction(89.99);      // [CHECK] Type safe
+const confidence = createConfidenceScore(0.92);  // [CHECK] Validated
 ```
 
 ---
 
-## 🚀 Getting Started
+## [ROCKET] Getting Started
 
 ### Prerequisites
 
@@ -359,7 +359,7 @@ NEXT_PUBLIC_ENABLE_PRICE_SUGGESTIONS=true
 
 ---
 
-## 💻 Development
+## [COMPUTER] Development
 
 ### Running Services
 
@@ -395,7 +395,7 @@ npm run db:seed
 
 ---
 
-## 📚 API Reference
+## [BOOKS] API Reference
 
 ### Price Suggestions
 
@@ -431,7 +431,7 @@ See [docs/API_REFERENCE.md](./docs/API_REFERENCE.md) for complete documentation.
 
 ---
 
-## 🔐 Security
+## [LOCK] Security
 
 - JWT authentication with Supabase
 - Row-Level Security (RLS) at database level
@@ -462,8 +462,8 @@ MIT License - see [LICENSE](./LICENSE) file for details.
 
 ## 📞 Support
 
-- 📧 Email: support@unilodge.com
-- 📖 Docs: [Documentation](./docs/README.md)
+- [EMAIL] Email: support@unilodge.com
+- [BOOK] Docs: [Documentation](./docs/README.md)
 - 🐛 Issues: [GitHub Issues](https://github.com/CosmicMagnetar/UniLodge/issues)
 
 ---
