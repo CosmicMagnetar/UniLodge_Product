@@ -12,6 +12,59 @@ The architecture follows a **three-tier model** with a decoupled AI engine:
 
 ---
 
+## Use Case Diagrams
+
+### System Overview & Actors
+
+![System Overview](./diagrams/diagram-images/usecase/04-system-overview.png)
+
+The system has three primary actors, each with distinct responsibilities and use cases:
+
+---
+
+### Student/Guest Use Cases
+
+![Student Use Cases](./diagrams/diagram-images/usecase/01-student-usecases.png)
+
+**Primary Activities**:
+- Account management (registration, login, profile)
+- Room discovery (search, filter, view details)
+- Booking management (submit requests, view status, cancel)
+- Payment processing (pay for bookings, view history)
+- Check-in/Check-out operations (self-service, mess card generation)
+- Reviews (submit ratings and feedback)
+- AI assistance (ask questions about rooms and bookings)
+
+---
+
+### Warden/Staff Use Cases
+
+![Warden Use Cases](./diagrams/diagram-images/usecase/02-warden-usecases.png)
+
+**Primary Activities**:
+- Guest verification (view booking details, payment status)
+- Check-in/Check-out operations (record times, generate mess cards)
+- Occupancy monitoring (track guest movements, view assignments)
+- Guest information access (retrieve details as needed)
+- AI assistance (ask operational questions)
+
+---
+
+### Administrator Use Cases
+
+![Admin Use Cases](./diagrams/diagram-images/usecase/03-admin-usecases.png)
+
+**Primary Activities**:
+- Dashboard & Analytics (revenue, occupancy, booking metrics)
+- Warden management (add, edit, remove staff)
+- Booking approvals (approve/reject booking requests)
+- Payment tracking (view transactions, payment status)
+- Room approvals (approve pending room listings)
+- Pricing optimization (view AI-generated price suggestions)
+- Check-in/Check-out operations (perform on behalf of users)
+
+---
+
 ## Architecture Layers
 
 ### 1. **Presentation Layer** (Frontend)

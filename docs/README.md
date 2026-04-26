@@ -15,6 +15,12 @@ Welcome to the UniLodge platform documentation. This folder contains comprehensi
 
 All diagrams are located in `diagrams/diagram-images/` and organized by type:
 
+#### Use Case Diagrams (Actor Interactions)
+- `usecase/01-student-usecases.png` - Student portal features and workflows
+- `usecase/02-warden-usecases.png` - Warden operations and guest management
+- `usecase/03-admin-usecases.png` - Admin dashboard and system management
+- `usecase/04-system-overview.png` - Complete system with all actors and external services
+
 #### Class Diagrams (Architecture)
 - `class/01-core-entities.png` - Domain model entities
 - `class/02-auth-service.png` - Authentication service architecture
