@@ -2,11 +2,12 @@ import React from 'react';
 import { Room } from '../../types';
 import { Icons } from './Icons';
 import { Button, Card } from './ui';
-import { WiFi, Wind, Wind as Ac, Utensils, Dumbbell, Wifi as WifiIcon } from 'lucide-react';
+import { Wifi, Wind, Utensils, Dumbbell } from 'lucide-react';
 
 // Amenity icons mapping
 const AmenityIcons: Record<string, React.ReactNode> = {
-  'WiFi': <WifiIcon size={16} className="text-blue-500" />,
+  'WiFi': <Wifi size={16} className="text-blue-500" />,
+  'Wifi': <Wifi size={16} className="text-blue-500" />,
   'AC': <Wind size={16} className="text-blue-500" />,
   'Kitchen': <Utensils size={16} className="text-emerald-500" />,
   'Gym Access': <Dumbbell size={16} className="text-purple-500" />,
@@ -74,7 +75,7 @@ export const RoomCard: React.FC<{ room: Room; onBook: (roomId: string) => void }
                 <div className="flex flex-wrap gap-2">
                     {room.amenities.slice(0, 3).map((amenity, idx) => (
                         <div key={idx} className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-600 hover:bg-blue-50 hover:border-blue-200 transition-colors">
-                            {AmenityIcons[amenity] || <WiFi size={14} />}
+                            {AmenityIcons[amenity] || <Wifi size={14} className="text-gray-500" />}
                             <span className="font-medium">{amenity}</span>
                         </div>
                     ))}

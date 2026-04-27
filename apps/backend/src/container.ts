@@ -32,7 +32,7 @@ class OpenRouterLLMRepository implements IHuggingFaceLLMRepository {
   constructor() {
     this.apiKey = process.env.OPENROUTER_API_KEY || '';
     this.endpoint = process.env.OPENROUTER_ENDPOINT || 'https://openrouter.ai/api/v1';
-    this.model = process.env.OPENROUTER_MODEL || 'openai/gpt-3.5-turbo';
+    this.model = process.env.OPENROUTER_MODEL || 'inclusionai/ling-2.6-1t:free';
   }
 
   async generateCompletion(

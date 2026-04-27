@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import Room from '../models/Room';
 import User from '../models/User';
+import Booking from '../models/Booking';
 
 dotenv.config();
 
@@ -252,10 +253,47 @@ const seed = async (): Promise<void> => {
     const insertedRooms = await Room.insertMany(dummyRooms);
     console.log(`  ✓ Created ${insertedRooms.length} rooms\n`);
 
+    // Seed bookings for guest
+    console.log('\n📅 Seeding bookings...');
+    const guestUser = await User.findOne({ email: 'guest@unilodge.com' });
+    if (guestUser && insertedRooms.length > 0) {
+      // Check if bookings already exist
+      const existingBookings = await Booking.countDocuments();
+      if (existingBookings > 0) {
+         console.log(`⚠️  Found ${existingBookings} existing bookings. Clearing...`);
+         await Booking.deleteMany({});
+      }
+
+      const booking1 = new Booking({
+        roomId: insertedRooms[0]._id,
+        userId: guestUser._id,
+        checkInDate: new Date(),
+        checkOutDate: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // 7 days later
+        status: 'Confirmed',
+        totalPrice: insertedRooms[0].price,
+        paymentStatus: 'paid',
+      });
+      await booking1.save();
+
+      const booking2 = new Booking({
+        roomId: insertedRooms[1]._id,
+        userId: guestUser._id,
+        checkInDate: new Date(new Date().getTime() + 14 * 24 * 60 * 60 * 1000), // 14 days later
+        checkOutDate: new Date(new Date().getTime() + 21 * 24 * 60 * 60 * 1000), // 21 days later
+        status: 'Pending',
+        totalPrice: insertedRooms[1].price,
+        paymentStatus: 'unpaid',
+      });
+      await booking2.save();
+
+      console.log(`  ✓ Created 2 bookings for guest@unilodge.com\n`);
+    }
+
     // Print summary
     console.log('📊 Seed Summary:');
     console.log(`  • Total Rooms: ${await Room.countDocuments()}`);
     console.log(`  • Total Users: ${await User.countDocuments()}`);
+    console.log(`  • Total Bookings: ${await Booking.countDocuments()}`);
     console.log('\n✨ Database seeding completed successfully!');
     console.log('\n🔐 Test credentials:');
     dummyUsers.forEach(user => {

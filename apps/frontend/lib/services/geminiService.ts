@@ -5,7 +5,7 @@ const API_KEY = process.env.NEXT_PUBLIC_OPENROUTER_API_KEY;
 // Base URL for OpenRouter
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
-const DEFAULT_MODEL = "arcee-ai/trinity-mini:free";
+const DEFAULT_MODEL = "inclusionai/ling-2.6-1t:free";
 
 const generationConfig = {
   temperature: 0.7,

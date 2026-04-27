@@ -7,6 +7,7 @@ import aiRouter from './routes/ai';
 import authRouter from './routes/auth';
 import roomRouter from './routes/rooms';
 import bookingRouter from './routes/bookings';
+import requestRouter from './routes/booking-requests';
 
 // Import Database Configuration
 import connectDB from './config/db';
@@ -62,6 +63,7 @@ app.use('/api/ai', aiRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/rooms', roomRouter);
 app.use('/api/bookings', bookingRouter);
+app.use('/api/booking-requests', requestRouter);
 
 // 404 handler
 app.use((req: Request, res: Response) => {
@@ -88,8 +90,7 @@ connectDB().then(() => {
 ║ Routes Mounted:                        ║
 ║   - /api/auth                          ║
 ║   - /api/rooms                         ║
-║   - /api/bookings                      ║
-║   - /api/ai                            ║
+║   - /api/bookings                      ║║   - /api/booking-requests              ║║   - /api/ai                            ║
 ╚════════════════════════════════════════╝
     `);
   });

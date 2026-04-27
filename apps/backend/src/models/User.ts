@@ -50,7 +50,7 @@ const UserSchema = new Schema<IUser>({
 });
 
 // Hash password before saving
-UserSchema.pre('save', async function (this: any, next: any) {
+UserSchema.pre('save', async function (this: any) {
   // Only hash if password is new or modified
   if (!this.isModified('password')) {
     // Auto-populate organization from email domain if not set
@@ -61,28 +61,22 @@ UserSchema.pre('save', async function (this: any, next: any) {
         this.organization = orgName.charAt(0).toUpperCase() + orgName.slice(1);
       }
     }
-    return next();
+    return;
   }
 
-  try {
-    // Ensure password is a string and not already hashed
-    const passwordToHash = this.password.toString();
+  // Ensure password is a string and not already hashed
+  const passwordToHash = this.password.toString();
 
-    // Use bcryptjs to hash with 10 salt rounds
-    this.password = await bcrypt.hash(passwordToHash, 10);
+  // Use bcryptjs to hash with 10 salt rounds
+  this.password = await bcrypt.hash(passwordToHash, 10);
 
-    // Auto-populate organization from email domain if not set
-    if (!this.organization && this.email) {
-      const domain = this.email.split('@')[1];
-      if (domain) {
-        const orgName = domain.split('.')[0];
-        this.organization = orgName.charAt(0).toUpperCase() + orgName.slice(1);
-      }
+  // Auto-populate organization from email domain if not set
+  if (!this.organization && this.email) {
+    const domain = this.email.split('@')[1];
+    if (domain) {
+      const orgName = domain.split('.')[0];
+      this.organization = orgName.charAt(0).toUpperCase() + orgName.slice(1);
     }
-
-    next();
-  } catch (error: any) {
-    next(error);
   }
 });
 

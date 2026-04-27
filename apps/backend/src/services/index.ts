@@ -24,6 +24,7 @@ export class RoomService extends PropertyDomainService {
 
     // Map Mongoose document to Domain interface if necessary
     return rooms.map(room => ({
+      ...room.toObject(),
       id: room._id.toString(),
       name: `Room ${room.roomNumber}`,
       description: room.description || '',
@@ -33,7 +34,7 @@ export class RoomService extends PropertyDomainService {
       images: [room.imageUrl],
       rating: room.rating,
       reviews: [],
-      available: room.isAvailable,
+      isAvailable: room.isAvailable,
       createdAt: room.createdAt,
       updatedAt: room.createdAt,
     })) as unknown as Property[];
@@ -44,6 +45,7 @@ export class RoomService extends PropertyDomainService {
     if (!room) return null;
 
     return {
+      ...room.toObject(),
       id: room._id.toString(),
       name: `Room ${room.roomNumber}`,
       description: room.description || '',
@@ -53,7 +55,7 @@ export class RoomService extends PropertyDomainService {
       images: [room.imageUrl],
       rating: room.rating,
       reviews: [],
-      available: room.isAvailable,
+      isAvailable: room.isAvailable,
       createdAt: room.createdAt,
       updatedAt: room.createdAt,
     } as unknown as Property;

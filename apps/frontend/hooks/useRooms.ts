@@ -21,7 +21,7 @@ export const useRooms = () => {
           amenities: r.amenities || [],
           rating: r.rating || 0,
           imageUrl: r.imageUrl,
-          isAvailable: r.isAvailable,
+          isAvailable: r.isAvailable !== undefined ? r.isAvailable : r.available,
           description: r.description,
           capacity: r.capacity,
           university: r.university,

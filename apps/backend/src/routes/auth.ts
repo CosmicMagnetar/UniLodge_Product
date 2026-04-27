@@ -56,6 +56,26 @@ export const requireAuth = async (req: Request, res: Response, next: express.Nex
     }
 };
 
+// Middleware to check user role
+export const requireRole = (requiredRole: string) => {
+    return async (req: Request, res: Response, next: express.NextFunction): Promise<void> => {
+        // First ensure user is authenticated
+        if (!(req as any).user) {
+            res.status(401).json({ error: 'Unauthorized: Authentication required' });
+            return;
+        }
+
+        const userRole = (req as any).user.role;
+
+        if (userRole !== requiredRole) {
+            res.status(403).json({ error: `Forbidden: Requires ${requiredRole} role` });
+            return;
+        }
+
+        next();
+    };
+};
+
 authRouter.get('/me', requireAuth, (req: Request, res: Response) => {
     res.status(200).json((req as any).user);
 });

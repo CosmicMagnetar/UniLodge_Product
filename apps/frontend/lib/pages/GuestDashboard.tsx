@@ -5,8 +5,10 @@ import { RoomCard } from './RoomCard';
 import { Card, Button, Input, Badge } from './ui';
 import AiAgentChat from './AiAgentChat';
 import { GridBackground } from '../../components/ui/GlowingCard';
-import { Search, Filter, MapPin, Calendar, X, CreditCard, CheckCircle, Clock, FileText, AlertCircle, Map, Utensils, User as UserIcon } from 'lucide-react';
+import { Search, Filter, MapPin, Calendar, X, CreditCard, CheckCircle, Clock, FileText, AlertCircle, Map, Utensils, User as UserIcon, QrCode } from 'lucide-react';
 import { useToast } from '../../components/ToastProvider';
+import { CampusMap } from '../../components/common/CampusMap';
+import { QRCodeDisplay } from '../../components/common/QRCodeDisplay';
 
 export type GuestDashboardProps = { 
     user: User; 
@@ -279,6 +281,66 @@ export const GuestDashboard: React.FC<GuestDashboardProps> = ({ user, rooms, onB
                                     </div>
                                 </div>
                             ))}
+                        </div>
+                    </Card>
+                )}
+
+                {/* Post-Approval Experience - Show when there's a confirmed booking */}
+                {myBookings.some(b => b.status === 'Confirmed') && (
+                    <Card className="p-8 shadow-xl border-none mb-12 bg-gradient-to-br from-blue-50 to-indigo-50">
+                        <div className="flex items-center gap-2 mb-6">
+                            <CheckCircle className="text-green-600" size={24} />
+                            <h2 className="text-xl font-bold text-slate-900">Your Stay is Confirmed!</h2>
+                        </div>
+                        <p className="text-slate-600 mb-6">Here are your digital tools for a seamless campus experience.</p>
+                        
+                        <div className="grid md:grid-cols-2 gap-6 mb-6">
+                            {/* Campus Map */}
+                            <div>
+                                <h3 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                                    <Map size={18} className="text-blue-600" />
+                                    Campus Map
+                                </h3>
+                                <CampusMap 
+                                    university={myBookings.find(b => b.status === 'Confirmed')?.room?.university || 'University'} 
+                                    roomNumber={(myBookings.find(b => b.status === 'Confirmed')?.room as any)?.roomNumber}
+                                />
+                            </div>
+
+                            {/* QR Codes */}
+                            <div className="space-y-4">
+                                <h3 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                                    <QrCode size={18} className="text-purple-600" />
+                                    Digital Passes
+                                </h3>
+                                <QRCodeDisplay
+                                    type="mess"
+                                    title="Mess Card"
+                                    subtitle={user.name}
+                                    value={myBookings.find(b => b.status === 'Confirmed')?.checkOutDate}
+                                />
+                                <QRCodeDisplay
+                                    type="bus"
+                                    title="Bus Pass"
+                                    subtitle={user.name}
+                                    value={myBookings.find(b => b.status === 'Confirmed')?.checkOutDate}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Quick Info */}
+                        <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-blue-100">
+                            <div className="flex items-start gap-3">
+                                <div className="p-2 bg-blue-100 text-blue-600 rounded-lg">
+                                    <MapPin size={18} />
+                                </div>
+                                <div>
+                                    <p className="font-semibold text-slate-900 text-sm">Check-in Instructions</p>
+                                    <p className="text-xs text-slate-600 mt-1">
+                                        Show your QR code at the mess and bus stops. Your room number is {(myBookings.find(b => b.status === 'Confirmed')?.room as any)?.roomNumber || 'assigned'}.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </Card>
                 )}
