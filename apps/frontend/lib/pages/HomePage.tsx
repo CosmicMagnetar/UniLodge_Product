@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  Moon, Sun, ChevronRight, CheckCircle, 
-  Layout, Shield, Zap, Users, Globe, 
+import {
+  Moon, Sun, ChevronRight, CheckCircle,
+  Layout, Shield, Zap, Users, Globe,
   Smartphone, ArrowRight, Star,
   GraduationCap, ShieldCheck, Quote,
   Map, Utensils, BedDouble, Facebook, Twitter, Instagram, Linkedin, Send,
-  ArrowLeft, PlusIcon
+  ArrowLeft, PlusIcon, Wifi as WifiIcon
 } from 'lucide-react';
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -271,8 +271,8 @@ export const HomePage = ({ onNavigate }: { onNavigate: (page: string) => void })
                      <ShieldCheck size={24} />
                    </div>
                    <div>
-                     <p className="text-xs font-bold uppercase text-slate-500">Verified Stay</p>
-                     <p className="font-bold text-slate-900">Intern Approved</p>
+                     <p className="text-xs font-bold uppercase text-slate-500">Verified & Secure</p>
+                     <p className="font-bold text-slate-900">200+ Rooms Ready</p>
                    </div>
                 </div>
              </div>
@@ -282,22 +282,53 @@ export const HomePage = ({ onNavigate }: { onNavigate: (page: string) => void })
                 <div className="flex items-center gap-3 mb-6">
                    <div className="h-px w-8 bg-blue-500"></div>
                    <span className="text-sm font-bold uppercase tracking-widest text-blue-600">
-                     Your Internship Companion
+                     Accommodations Made Easy
                    </span>
                 </div>
                 <h1 className="text-4xl md:text-6xl font-extrabold mb-8 leading-tight text-slate-900">
-                  Trust the platform that simplifies your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">internship stay.</span>
+                  Find Your Perfect <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Campus Room</span>
                 </h1>
                 <p className="text-lg md:text-xl mb-10 leading-relaxed text-slate-600">
-                  Secure on-campus rooms, access dining mess facilities, and navigate the university map—all designed specifically for visiting interns.
+                  Browse 200+ verified rooms across top universities. Book instantly, get your mess card, access campus maps—everything you need for a seamless internship stay.
                 </p>
-                
+
+                <div className="mb-8 grid grid-cols-2 gap-4 text-sm">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="text-green-500 flex-shrink-0 mt-1" size={20} />
+                    <div>
+                      <p className="font-semibold text-slate-900">13+ Universities</p>
+                      <p className="text-slate-600 text-xs">Across multiple campuses</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="text-green-500 flex-shrink-0 mt-1" size={20} />
+                    <div>
+                      <p className="font-semibold text-slate-900">Instant Booking</p>
+                      <p className="text-slate-600 text-xs">Confirm in minutes</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="text-green-500 flex-shrink-0 mt-1" size={20} />
+                    <div>
+                      <p className="font-semibold text-slate-900">24/7 Support</p>
+                      <p className="text-slate-600 text-xs">Always here to help</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="text-green-500 flex-shrink-0 mt-1" size={20} />
+                    <div>
+                      <p className="font-semibold text-slate-900">Secure Payment</p>
+                      <p className="text-slate-600 text-xs">Protected transactions</p>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="flex flex-wrap gap-4">
-                  <button className="px-8 py-4 rounded-full font-bold shadow-xl transition-all transform hover:-translate-y-1 flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700">
-                    Book Accommodation <ArrowRight size={18} />
+                  <button onClick={() => onNavigate('login')} className="px-8 py-4 rounded-full font-bold shadow-xl transition-all transform hover:-translate-y-1 flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700">
+                    Start Booking Now <ArrowRight size={18} />
                   </button>
-                  <button className="px-8 py-4 rounded-full font-bold border transition-all hover:-translate-y-1 border-slate-200 text-slate-600 hover:bg-slate-50">
-                    View Campus Map
+                  <button onClick={() => onNavigate('guest-dashboard')} className="px-8 py-4 rounded-full font-bold border transition-all hover:-translate-y-1 border-slate-200 text-slate-600 hover:bg-slate-50">
+                    Browse Rooms
                   </button>
                 </div>
              </div>
@@ -306,7 +337,7 @@ export const HomePage = ({ onNavigate }: { onNavigate: (page: string) => void })
           {/* New Animated Testimonials */}
           <div className="relative z-10 pt-10">
             <div className="text-center opacity-80 mb-4">
-              <h2 className="text-2xl font-bold text-slate-900">Trusted Voices</h2>
+              <h2 className="text-2xl font-bold text-slate-900">Trusted by 1500+ Students</h2>
             </div>
             <AnimatedTestimonials testimonials={testimonials} autoplay={true} />
           </div>
@@ -318,10 +349,10 @@ export const HomePage = ({ onNavigate }: { onNavigate: (page: string) => void })
       <section className="border-y border-slate-200 bg-slate-50">
         <div className="max-w-7xl mx-auto">
            <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-slate-200">
-             <StatCard value="200+" label="Hostel Rooms" />
-             <StatCard value="1.5k" label="Interns Housed" />
-             <StatCard value="100%" label="Verified Stays" />
-             <StatCard value="24/7" label="Support" />
+             <StatCard value="200+" label="Rooms Available" />
+             <StatCard value="1.5k+" label="Active Students" />
+             <StatCard value="13+" label="Universities" />
+             <StatCard value="24/7" label="Support Team" />
            </div>
         </div>
       </section>
@@ -380,36 +411,186 @@ export const HomePage = ({ onNavigate }: { onNavigate: (page: string) => void })
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <FeatureCard 
+            <FeatureCard
               icon={BedDouble}
               title="Intern Accommodation"
               desc="Browse available guest house rooms or short-term hostel stays specifically reserved for visiting interns."
             />
-            <FeatureCard 
+            <FeatureCard
               icon={Utensils}
               title="Mess Access Card"
               desc="Skip the paperwork. Generate a digital QR-code mess card instantly to access breakfast, lunch, and dinner."
             />
-            <FeatureCard 
+            <FeatureCard
               icon={Map}
               title="Campus Navigation"
               desc="Never get lost. Our detailed interactive map shows you exactly where your lab, hostel, and mess hall are."
             />
-             <FeatureCard 
+             <FeatureCard
               icon={Shield}
               title="Verified Security"
               desc="Your booking grants you authorized entry at the main gate. Show your digital pass for hassle-free access."
             />
-             <FeatureCard 
+             <FeatureCard
               icon={Globe}
               title="Wi-Fi Provisioning"
               desc="Get your temporary campus Wi-Fi credentials automatically as soon as your room booking is confirmed."
             />
-             <FeatureCard 
+             <FeatureCard
               icon={Smartphone}
               title="Mobile Managed"
               desc="Extend your stay, top-up your mess card balance, or report a room issue directly from your phone."
             />
+          </div>
+        </div>
+      </section>
+
+      {/* --- Featured Rooms Section --- */}
+      <section className="py-20 px-4 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <Badge>Browse Accommodations</Badge>
+            <h2 className="text-3xl md:text-5xl font-bold mb-4 text-slate-900">
+              Featured Rooms Ready for You
+            </h2>
+            <p className="max-w-2xl mx-auto text-lg text-slate-600">
+              Explore our most popular rooms across campus. Each room is verified and ready for immediate booking.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {/* Sample Room 1 */}
+            <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow group cursor-pointer">
+              <div className="relative h-56 bg-gradient-to-br from-blue-100 to-blue-50 overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500&h=400&fit=crop"
+                  alt="Standard Single Room"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute top-4 left-4">
+                  <span className="inline-block px-3 py-1 bg-blue-600/90 backdrop-blur-sm text-white text-xs font-bold rounded-full">Single</span>
+                </div>
+                <div className="absolute top-4 right-4">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-emerald-500/90 backdrop-blur-sm text-white text-xs font-bold rounded-full">
+                    <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                    Available
+                  </span>
+                </div>
+                <div className="absolute bottom-4 right-4 flex items-center gap-1 px-3 py-1.5 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg">
+                  <Star size={16} className="text-amber-500 fill-amber-500" />
+                  <span className="font-bold text-slate-900">4.5</span>
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-slate-900 mb-2">Room 101</h3>
+                <p className="text-sm text-slate-600 mb-4">Stanford University - Bright, airy single room with study desk and bookshelf.</p>
+                <div className="flex gap-2 mb-4 flex-wrap">
+                  <span className="text-xs bg-slate-50 border border-slate-200 px-2 py-1 rounded text-slate-600">WiFi</span>
+                  <span className="text-xs bg-slate-50 border border-slate-200 px-2 py-1 rounded text-slate-600">AC</span>
+                  <span className="text-xs bg-slate-50 border border-slate-200 px-2 py-1 rounded text-slate-600">+2 more</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-xs font-semibold text-slate-500 uppercase">From</span>
+                    <div className="text-2xl font-bold text-blue-600">$650<span className="text-sm text-slate-500 font-medium">/mo</span></div>
+                  </div>
+                  <button onClick={() => onNavigate('login')} className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
+                    Book
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Sample Room 2 */}
+            <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow group cursor-pointer">
+              <div className="relative h-56 bg-gradient-to-br from-purple-100 to-purple-50 overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=500&h=400&fit=crop"
+                  alt="Double Room"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute top-4 left-4">
+                  <span className="inline-block px-3 py-1 bg-blue-600/90 backdrop-blur-sm text-white text-xs font-bold rounded-full">Double</span>
+                </div>
+                <div className="absolute top-4 right-4">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-emerald-500/90 backdrop-blur-sm text-white text-xs font-bold rounded-full">
+                    <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                    Available
+                  </span>
+                </div>
+                <div className="absolute bottom-4 right-4 flex items-center gap-1 px-3 py-1.5 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg">
+                  <Star size={16} className="text-amber-500 fill-amber-500" />
+                  <span className="font-bold text-slate-900">4.8</span>
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-slate-900 mb-2">Room 301</h3>
+                <p className="text-sm text-slate-600 mb-4">Harvard University - Spacious double room with premium amenities and modern decor.</p>
+                <div className="flex gap-2 mb-4 flex-wrap">
+                  <span className="text-xs bg-slate-50 border border-slate-200 px-2 py-1 rounded text-slate-600">WiFi</span>
+                  <span className="text-xs bg-slate-50 border border-slate-200 px-2 py-1 rounded text-slate-600">Premium Suite</span>
+                  <span className="text-xs bg-slate-50 border border-slate-200 px-2 py-1 rounded text-slate-600">+1 more</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-xs font-semibold text-slate-500 uppercase">From</span>
+                    <div className="text-2xl font-bold text-blue-600">$1400<span className="text-sm text-slate-500 font-medium">/mo</span></div>
+                  </div>
+                  <button onClick={() => onNavigate('login')} className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
+                    Book
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Sample Room 3 */}
+            <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow group cursor-pointer">
+              <div className="relative h-56 bg-gradient-to-br from-green-100 to-green-50 overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=500&h=400&fit=crop"
+                  alt="Studio Room"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute top-4 left-4">
+                  <span className="inline-block px-3 py-1 bg-blue-600/90 backdrop-blur-sm text-white text-xs font-bold rounded-full">Studio</span>
+                </div>
+                <div className="absolute top-4 right-4">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-emerald-500/90 backdrop-blur-sm text-white text-xs font-bold rounded-full">
+                    <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                    Available
+                  </span>
+                </div>
+                <div className="absolute bottom-4 right-4 flex items-center gap-1 px-3 py-1.5 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg">
+                  <Star size={16} className="text-amber-500 fill-amber-500" />
+                  <span className="font-bold text-slate-900">4.4</span>
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-slate-900 mb-2">Room 402</h3>
+                <p className="text-sm text-slate-600 mb-4">Princeton University - Compact studio perfect for students seeking independence and affordability.</p>
+                <div className="flex gap-2 mb-4 flex-wrap">
+                  <span className="text-xs bg-slate-50 border border-slate-200 px-2 py-1 rounded text-slate-600">WiFi</span>
+                  <span className="text-xs bg-slate-50 border border-slate-200 px-2 py-1 rounded text-slate-600">Furnished</span>
+                  <span className="text-xs bg-slate-50 border border-slate-200 px-2 py-1 rounded text-slate-600">+2 more</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-xs font-semibold text-slate-500 uppercase">From</span>
+                    <div className="text-2xl font-bold text-blue-600">$600<span className="text-sm text-slate-500 font-medium">/mo</span></div>
+                  </div>
+                  <button onClick={() => onNavigate('login')} className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
+                    Book
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* View All Rooms Button */}
+          <div className="text-center">
+            <button onClick={() => onNavigate('login')} className="px-8 py-4 rounded-full font-bold text-blue-600 border-2 border-blue-600 hover:bg-blue-50 transition-all">
+              Explore All {13} Available Rooms <ChevronRight className="inline ml-2" size={20} />
+            </button>
           </div>
         </div>
       </section>

@@ -61,7 +61,7 @@ UserSchema.pre('save', async function (this: any, next: any) {
         this.organization = orgName.charAt(0).toUpperCase() + orgName.slice(1);
       }
     }
-    return next();
+    return;
   }
 
   try {
