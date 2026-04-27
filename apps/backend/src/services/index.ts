@@ -1,197 +1,209 @@
 import { Property, PropertyDomainService } from '../domains/property/property.domain';
-import { User, AuthDomainService, LoginRequest, RegisterRequest, AuthResponse } from '../domains/auth/auth.domain';
+import { User as DomainUser, AuthDomainService, LoginRequest, RegisterRequest, AuthResponse } from '../domains/auth/auth.domain';
 import { UserProfile, UserDomainService } from '../domains/user/user.domain';
+import jwt from 'jsonwebtoken';
 
-// --- MOCK DATA SOURCE (Simulating a database) ---
-// We use the mock data from mock-api.js as our "database" for the backend services
+// Mongoose Models
+import User from '../models/User';
+import Room from '../models/Room';
+import Booking from '../models/Booking';
 
-const MOCK_DB = {
-  users: [
-    {
-      id: '1',
-      name: 'John Student',
-      email: 'user@example.com',
-      password: 'password123',
-      role: 'GUEST',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 'admin1',
-      name: 'Admin User',
-      email: 'admin@example.com',
-      password: 'admin123',
-      role: 'ADMIN',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 'warden1',
-      name: 'Warden User',
-      email: 'warden@example.com',
-      password: 'warden123',
-      role: 'WARDEN',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  ],
-  rooms: [
-    {
-      id: 'room1',
-      name: 'Room 101',
-      description: 'Comfortable single room with all amenities',
-      location: 'State University, Building A',
-      price: 500,
-      amenities: ['WiFi', 'AC', 'Bed'],
-      images: ['/images/room1.jpg'],
-      rating: 4.5,
-      reviews: [],
-      available: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 'room2',
-      name: 'Room 102',
-      description: 'Spacious double room with modern furniture',
-      location: 'State University, Building B',
-      price: 750,
-      amenities: ['WiFi', 'AC', 'Two Beds', 'Balcony'],
-      images: ['/images/room2.jpg'],
-      rating: 4.7,
-      reviews: [],
-      available: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 'room3',
-      name: 'Room 103',
-      description: 'Luxury suite with complete amenities',
-      location: 'State University, Building C',
-      price: 1200,
-      amenities: ['WiFi', 'AC', 'Bed', 'Sofa', 'Kitchen'],
-      images: ['/images/room3.jpg'],
-      rating: 4.9,
-      reviews: [],
-      available: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  ],
-  bookings: [] as any[],
-  tokens: {} as Record<string, string>, // token -> userId
-};
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret';
 
 // ============================================================
 // Service Implementations (SRP & Clean Architecture)
 // ============================================================
 
 export class RoomService extends PropertyDomainService {
-  async searchRooms(_query: any): Promise<Property[]> {
-    return MOCK_DB.rooms as unknown as Property[];
+  async searchRooms(query: any): Promise<Property[]> {
+    const filter: any = {};
+    if (query.type) filter.type = query.type;
+    if (query.available === 'true') filter.isAvailable = true;
+
+    const rooms = await Room.find(filter);
+
+    // Map Mongoose document to Domain interface if necessary
+    return rooms.map(room => ({
+      id: room._id.toString(),
+      name: `Room ${room.roomNumber}`,
+      description: room.description || '',
+      location: room.university,
+      price: room.price,
+      amenities: room.amenities,
+      images: [room.imageUrl],
+      rating: room.rating,
+      reviews: [],
+      available: room.isAvailable,
+      createdAt: room.createdAt,
+      updatedAt: room.createdAt,
+    })) as unknown as Property[];
   }
 
   async getRoomById(id: string): Promise<Property | null> {
-    const room = MOCK_DB.rooms.find(r => r.id === id);
-    return room ? (room as unknown as Property) : null;
+    const room = await Room.findById(id);
+    if (!room) return null;
+
+    return {
+      id: room._id.toString(),
+      name: `Room ${room.roomNumber}`,
+      description: room.description || '',
+      location: room.university,
+      price: room.price,
+      amenities: room.amenities,
+      images: [room.imageUrl],
+      rating: room.rating,
+      reviews: [],
+      available: room.isAvailable,
+      createdAt: room.createdAt,
+      updatedAt: room.createdAt,
+    } as unknown as Property;
   }
 }
 
 export class BookingService {
   async createBooking(data: { roomId: string; userId: string; checkInDate: string; checkOutDate: string }) {
-    const room = MOCK_DB.rooms.find(r => r.id === data.roomId);
+    const room = await Room.findById(data.roomId);
     if (!room) throw new Error('Room not found');
 
-    const booking = {
-      id: `booking-${Math.random().toString(36).substr(2, 9)}`,
+    const booking = new Booking({
       roomId: data.roomId,
       userId: data.userId,
-      checkInDate: data.checkInDate,
-      checkOutDate: data.checkOutDate,
+      checkInDate: new Date(data.checkInDate),
+      checkOutDate: new Date(data.checkOutDate),
       status: 'Confirmed',
-      totalPrice: room.price,
-      room: room,
-      paymentStatus: 'Pending',
-      createdAt: new Date(),
+      totalPrice: room.price, // simplistic calculation
+      paymentStatus: 'unpaid',
+    });
+
+    await booking.save();
+
+    // Return populated booking
+    const populatedBooking = await Booking.findById(booking._id).populate('roomId');
+
+    return {
+      id: populatedBooking?._id.toString(),
+      roomId: populatedBooking?.roomId,
+      userId: populatedBooking?.userId,
+      checkInDate: populatedBooking?.checkInDate,
+      checkOutDate: populatedBooking?.checkOutDate,
+      status: populatedBooking?.status,
+      totalPrice: populatedBooking?.totalPrice,
+      room: populatedBooking?.roomId,
+      paymentStatus: populatedBooking?.paymentStatus,
+      createdAt: populatedBooking?.createdAt,
     };
-    
-    MOCK_DB.bookings.push(booking);
-    return booking;
   }
 
   async getBookings(userId: string) {
-    return MOCK_DB.bookings.filter(b => b.userId === userId);
+    const bookings = await Booking.find({ userId }).populate('roomId');
+    return bookings.map(b => ({
+      id: b._id.toString(),
+      roomId: b.roomId?._id?.toString(),
+      userId: b.userId.toString(),
+      checkInDate: b.checkInDate,
+      checkOutDate: b.checkOutDate,
+      status: b.status,
+      totalPrice: b.totalPrice,
+      room: b.roomId, // The populated room
+      paymentStatus: b.paymentStatus,
+      createdAt: b.createdAt,
+    }));
   }
 }
 
 export class AuthService extends AuthDomainService {
-  
+
   async login(request: LoginRequest): Promise<AuthResponse> {
-    const user = MOCK_DB.users.find(u => u.email === request.email && u.password === request.password);
-    
+    const user = await User.findOne({ email: request.email.toLowerCase() });
+
     if (!user) {
       throw new Error('Invalid credentials');
     }
-    
-    const token = `mock-token-${Math.random().toString(36).substr(2, 9)}`;
-    MOCK_DB.tokens[token] = user.id;
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userWithoutPassword } = user;
-    
+    try {
+      const isMatch = await user.comparePassword(request.password);
+      if (!isMatch) {
+        throw new Error('Invalid credentials');
+      }
+    } catch (error: any) {
+      // Log for debugging
+      console.error('[AuthService] Password comparison failed:', error.message);
+      throw new Error('Invalid credentials');
+    }
+
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
     return {
       token,
-      user: userWithoutPassword as unknown as User,
+      user: {
+        id: user._id.toString(),
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      } as unknown as DomainUser,
     };
   }
 
-  async register(data: RegisterRequest): Promise<User> {
-    if (MOCK_DB.users.some(u => u.email === data.email)) {
+  async register(data: RegisterRequest): Promise<DomainUser> {
+    const existingUser = await User.findOne({ email: data.email.toLowerCase() });
+
+    if (existingUser) {
       throw new Error('Email already exists');
     }
 
-    const newUser = {
-      id: `user-${Math.random().toString(36).substr(2, 9)}`,
+    const newUser = new User({
       name: data.name,
-      email: data.email,
+      email: data.email.toLowerCase(),
       password: data.password,
       role: data.role || 'GUEST',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    });
 
-    MOCK_DB.users.push(newUser);
-    
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userWithoutPassword } = newUser;
-    return userWithoutPassword as unknown as User;
+    await newUser.save();
+
+    return {
+      id: newUser._id.toString(),
+      name: newUser.name,
+      email: newUser.email,
+      role: newUser.role,
+    } as unknown as DomainUser;
   }
-  
-  async validateToken(token: string): Promise<User> {
-      const userId = MOCK_DB.tokens[token];
-      if (!userId) {
-          throw new Error('Invalid token');
-      }
-      
-      const user = MOCK_DB.users.find(u => u.id === userId);
+
+  async validateToken(token: string): Promise<DomainUser> {
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET) as { id: string, role: string };
+      const user = await User.findById(decoded.id);
+
       if (!user) {
-          throw new Error('User not found');
+        throw new Error('User not found');
       }
-      
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...userWithoutPassword } = user;
-      return userWithoutPassword as unknown as User;
+
+      return {
+        id: user._id.toString(),
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      } as unknown as DomainUser;
+    } catch (error) {
+      throw new Error('Invalid or expired token');
+    }
   }
 }
 
 export class UserService extends UserDomainService {
-    async getUserProfile(userId: string): Promise<UserProfile | null> {
-        const user = MOCK_DB.users.find(u => u.id === userId);
-        if (!user) return null;
-        
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { password, ...userProfile } = user;
-        return userProfile as unknown as UserProfile;
-    }
+  async getUserProfile(userId: string): Promise<UserProfile | null> {
+    const user = await User.findById(userId);
+    if (!user) return null;
+
+    return {
+      id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+      createdAt: user.createdAt,
+      updatedAt: user.createdAt,
+    } as unknown as UserProfile;
+  }
 }

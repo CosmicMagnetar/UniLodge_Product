@@ -1,24 +1,87 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Booking } from '../../types';
 import { Card, Button, Badge } from './ui';
-import { Calendar, CreditCard, Clock, MapPin, AlertCircle } from 'lucide-react';
+import { Calendar, CreditCard, Clock, MapPin, AlertCircle, Filter, ArrowUpDown } from 'lucide-react';
 
-export type MyBookingsPageProps = { 
-    bookings: Booking[]; 
-    onCancel?: (bookingId: string) => void; 
+export type MyBookingsPageProps = {
+    bookings: Booking[];
+    onCancel?: (bookingId: string) => void;
 };
 
-export const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ bookings, onCancel }) => (
-    <div className="min-h-screen bg-slate-50 pb-20">
+export const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ bookings, onCancel }) => {
+    const [statusFilter, setStatusFilter] = useState<string>('all');
+    const [sortBy, setSortBy] = useState<'date' | 'price'>('date');
+
+    // Filter bookings based on status
+    const filteredBookings = statusFilter === 'all'
+        ? bookings
+        : bookings.filter(b => b.status?.toLowerCase() === statusFilter.toLowerCase());
+
+    // Sort bookings
+    const sortedBookings = [...filteredBookings].sort((a, b) => {
+        if (sortBy === 'date') {
+            return new Date(a.checkInDate).getTime() - new Date(b.checkInDate).getTime();
+        }
+        return (b.totalPrice || 0) - (a.totalPrice || 0);
+    });
+
+    const statuses = ['all', 'Confirmed', 'Pending', 'Cancelled'];
+
+    return (
+    <div className="min-h-screen bg-slate-50 pb-20 pt-24">
         {/* Header */}
-        <div className="bg-white border-b border-slate-200">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <h1 className="text-3xl font-bold text-slate-900">My Bookings</h1>
-                <p className="text-slate-500 mt-1">Manage your upcoming and past stays.</p>
+        <div className="bg-white border-b border-slate-200 sticky top-20 z-40">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div>
+                        <h1 className="text-3xl font-bold text-slate-900">My Bookings</h1>
+                        <p className="text-slate-500 mt-1">You have {filteredBookings.length} {statusFilter === 'all' ? 'total' : statusFilter.toLowerCase()} booking(s).</p>
+                    </div>
+                    <div className="text-sm text-slate-600 bg-blue-50 px-4 py-2 rounded-lg border border-blue-200">
+                        📌 Only your bookings are displayed
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {/* Filters */}
+            <div className="mb-8 space-y-4">
+                <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                    <div className="flex items-center gap-2">
+                        <Filter size={20} className="text-slate-600" />
+                        <span className="font-semibold text-slate-700">Status:</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                        {statuses.map(status => (
+                            <button
+                                key={status}
+                                onClick={() => setStatusFilter(status)}
+                                className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                                    statusFilter === status
+                                        ? 'bg-blue-600 text-white shadow-md'
+                                        : 'bg-white border border-slate-200 text-slate-700 hover:border-blue-300'
+                                }`}
+                            >
+                                {status === 'all' ? 'All Bookings' : status}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                    <ArrowUpDown size={20} className="text-slate-600" />
+                    <span className="font-semibold text-slate-700">Sort by:</span>
+                    <select
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value as 'date' | 'price')}
+                        className="px-4 py-2 border border-slate-200 rounded-lg bg-white hover:bg-slate-50 focus:ring-2 focus:ring-blue-500 outline-none"
+                    >
+                        <option value="date">Check-in Date</option>
+                        <option value="price">Price (High to Low)</option>
+                    </select>
+                </div>
+            </div>
             {bookings.length === 0 ? (
                 <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-slate-300">
                     <div className="mx-auto h-16 w-16 bg-slate-100 rounded-full flex items-center justify-center mb-4 text-slate-400">
@@ -28,9 +91,18 @@ export const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ bookings, onCanc
                     <p className="text-slate-500 mt-1">You haven't made any reservations yet.</p>
                     <Button className="mt-6" onClick={() => window.location.href = '/'}>Browse Rooms</Button>
                 </div>
+            ) : filteredBookings.length === 0 ? (
+                <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-slate-300">
+                    <div className="mx-auto h-16 w-16 bg-slate-100 rounded-full flex items-center justify-center mb-4 text-slate-400">
+                        <AlertCircle size={32} />
+                    </div>
+                    <h3 className="text-lg font-semibold text-slate-900">No {statusFilter} bookings</h3>
+                    <p className="text-slate-500 mt-1">Try adjusting your filters to see your bookings.</p>
+                    <Button className="mt-6" variant="outline" onClick={() => setStatusFilter('all')}>View All Bookings</Button>
+                </div>
             ) : (
                 <div className="space-y-6">
-                    {bookings.map(booking => (
+                    {sortedBookings.map(booking => (
                         <Card key={booking.id} className="overflow-hidden hover:shadow-md transition-shadow border-slate-200">
                             <div className="flex flex-col md:flex-row">
                                 {/* Image Section */}
@@ -130,4 +202,5 @@ export const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ bookings, onCanc
             )}
         </div>
     </div>
-);
+    );
+};

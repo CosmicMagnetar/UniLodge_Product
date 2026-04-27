@@ -8,6 +8,9 @@ import authRouter from './routes/auth';
 import roomRouter from './routes/rooms';
 import bookingRouter from './routes/bookings';
 
+// Import Database Configuration
+import connectDB from './config/db';
+
 // Import Middleware
 import { requestLogger, rateLimitMiddleware, errorHandler } from './middleware';
 
@@ -73,8 +76,9 @@ app.use((req: Request, res: Response) => {
 app.use(errorHandler);
 
 // Start server
-const server = app.listen(PORT, () => {
-  console.log(`
+connectDB().then(() => {
+  const server = app.listen(PORT, () => {
+    console.log(`
 ╔════════════════════════════════════════╗
 ║   UniLodge API Server                  ║
 ╠════════════════════════════════════════╣
@@ -87,23 +91,24 @@ const server = app.listen(PORT, () => {
 ║   - /api/bookings                      ║
 ║   - /api/ai                            ║
 ╚════════════════════════════════════════╝
-  `);
-});
-
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('SIGTERM received, shutting down gracefully...');
-  server.close(() => {
-    console.log('Server closed');
-    process.exit(0);
+    `);
   });
-});
 
-process.on('SIGINT', () => {
-  console.log('SIGINT received, shutting down gracefully...');
-  server.close(() => {
-    console.log('Server closed');
-    process.exit(0);
+  // Graceful shutdown
+  process.on('SIGTERM', () => {
+    console.log('SIGTERM received, shutting down gracefully...');
+    server.close(() => {
+      console.log('Server closed');
+      process.exit(0);
+    });
+  });
+
+  process.on('SIGINT', () => {
+    console.log('SIGINT received, shutting down gracefully...');
+    server.close(() => {
+      console.log('Server closed');
+      process.exit(0);
+    });
   });
 });
 

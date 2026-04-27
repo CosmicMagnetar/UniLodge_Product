@@ -486,9 +486,9 @@ export const GuestDashboard: React.FC<GuestDashboardProps> = ({ user, rooms, onB
                 <div className="flex flex-col md:flex-row gap-8 mb-12">
                     {/* Sidebar Filters */}
                     <div className="w-full md:w-1/4 space-y-6">
-                        <Card className="p-6 sticky top-24">
+                        <Card className="p-6 sticky top-24 bg-white/70 backdrop-blur-md border border-white/20 shadow-lg">
                             <div className="flex items-center gap-2 mb-6 text-slate-900">
-                                <Filter size={20} />
+                                <Filter size={20} className="text-blue-600" />
                                 <h2 className="font-bold text-lg">Filters</h2>
                             </div>
                             
@@ -498,7 +498,7 @@ export const GuestDashboard: React.FC<GuestDashboardProps> = ({ user, rooms, onB
                                     <select
                                         value={selectedUniversity}
                                         onChange={(e) => setSelectedUniversity(e.target.value)}
-                                        className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                                        className="w-full px-3 py-2.5 bg-white/60 backdrop-blur-sm border border-white/20 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all hover:bg-white/80"
                                     >
                                         <option value="">All Universities</option>
                                         {universities.map(uni => (
@@ -512,12 +512,13 @@ export const GuestDashboard: React.FC<GuestDashboardProps> = ({ user, rooms, onB
                                     <select
                                         value={roomType}
                                         onChange={(e) => setRoomType(e.target.value)}
-                                        className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                                        className="w-full px-3 py-2.5 bg-white/60 backdrop-blur-sm border border-white/20 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all hover:bg-white/80"
                                     >
                                         <option value="">All Types</option>
                                         <option value="Single">Single</option>
                                         <option value="Double">Double</option>
                                         <option value="Suite">Suite</option>
+                                        <option value="Studio">Studio</option>
                                     </select>
                                 </div>
 
@@ -526,7 +527,7 @@ export const GuestDashboard: React.FC<GuestDashboardProps> = ({ user, rooms, onB
                                     <select
                                         value={sortBy}
                                         onChange={(e) => setSortBy(e.target.value)}
-                                        className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                                        className="w-full px-3 py-2.5 bg-white/60 backdrop-blur-sm border border-white/20 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all hover:bg-white/80"
                                     >
                                         <option value="">Recommended</option>
                                         <option value="price_asc">Price: Low to High</option>
@@ -541,7 +542,7 @@ export const GuestDashboard: React.FC<GuestDashboardProps> = ({ user, rooms, onB
                                     <select
                                         value={priceRange}
                                         onChange={(e) => setPriceRange(e.target.value)}
-                                        className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                                        className="w-full px-3 py-2.5 bg-white/60 backdrop-blur-sm border border-white/20 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all hover:bg-white/80"
                                     >
                                         <option value="">Any Price</option>
                                         <option value="0-500">$0 - $500</option>
@@ -579,7 +580,7 @@ export const GuestDashboard: React.FC<GuestDashboardProps> = ({ user, rooms, onB
                                     placeholder="Search by room number, type, university, or description..."
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full pl-12 pr-4 py-4 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all shadow-sm"
+                                    className="w-full pl-12 pr-4 py-4 bg-white/70 backdrop-blur-md border border-white/20 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all shadow-lg hover:bg-white/80"
                                 />
                                 {isSearching && (
                                     <div className="absolute right-4 top-1/2 -translate-y-1/2">
