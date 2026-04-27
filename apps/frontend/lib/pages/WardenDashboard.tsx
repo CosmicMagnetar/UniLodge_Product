@@ -1,14 +1,15 @@
 import React from 'react';
-import { User, Booking, Role } from '../../types';
-import { Card, Badge, Button } from './ui.tsx';
-import  AiAgentChat  from './AiAgentChat.tsx';
+import { User, Room, Booking, Role } from '../../types';
+import { Card, Badge, Button } from './ui';
+import  AiAgentChat  from './AiAgentChat';
 import { UserCheck, LogOut, Clock, Calendar, Mail, User as UserIcon } from 'lucide-react';
 
 export type WardenDashboardProps = {
     user: User;
+    rooms?: Room[];
     bookings: Booking[];
-    onCheckIn: (bookingId: string) => void;
-    onCheckOut: (bookingId: string) => void;
+    onCheckIn: (bookingId: string) => void | Promise<void>;
+    onCheckOut: (bookingId: string) => void | Promise<void>;
 };
 
 // Helper to format date/time

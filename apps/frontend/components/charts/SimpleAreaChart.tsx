@@ -38,12 +38,12 @@ export const SimpleAreaChart: React.FC<SimpleAreaChartProps> = ({
   const path2 = createPath(data.map(d => d.value2));
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-800
+        <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
         <div className="flex items-center gap-4 text-sm">
-          <span className="text-gray-600 <span className="text-gray-400 In</span></span>
-          <span className="text-gray-600 <span className="text-gray-400 Out</span></span>
+          <span className="text-gray-600"><span className="text-gray-400">In</span></span>
+          <span className="text-gray-600"><span className="text-gray-400">Out</span></span>
         </div>
       </div>
 

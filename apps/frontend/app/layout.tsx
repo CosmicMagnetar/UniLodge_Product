@@ -1,7 +1,6 @@
 // Frontend root layout
 import type { Metadata } from "next";
 import { ToastProvider } from "../components/ToastProvider";
-import { ThemeProvider } from "../contexts/ThemeContext";
 import "../styles/index.css";
 import "../styles/animations.css";
 
@@ -21,11 +20,9 @@ export default function RootLayout({
         <link rel="icon" href="/images/UniLodge.png" />
       </head>
       <body>
-        <ThemeProvider>
-          <ToastProvider>
-            {children}
-          </ToastProvider>
-        </ThemeProvider>
+        <ToastProvider>
+          {children}
+        </ToastProvider>
       </body>
     </html>
   );

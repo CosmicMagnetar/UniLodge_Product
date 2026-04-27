@@ -115,9 +115,7 @@ export const ChatWidget: React.FC = () => {
                   }`}
                 >
                   <p className="text-sm whitespace-pre-wrap">{message.text}</p>
-                  <p className={`text-xs mt-1 ${
-                    message.sender === 'user' ? 'text-white/70' : 'text-gray-500
-                  }`}>
+                  <p className={`text-xs mt-1 ${message.sender === 'user' ? 'text-white/70' : 'text-gray-500'}`}>
                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </div>
@@ -128,14 +126,14 @@ export const ChatWidget: React.FC = () => {
               <div className="flex justify-start">
                 <div className="bg-gray-100 rounded-2xl rounded-bl-sm px-4 py-3 flex items-center space-x-2">
                   <Loader2 className="h-4 w-4 text-gray-500 animate-spin" />
-                  <span className="text-sm text-gray-500
+                  <span className="text-sm text-gray-500"/>
                 </div>
               </div>
             )}
           </div>
 
           {/* Input */}
-          <div className="p-4 border-t border-gray-200
+          <div className="p-4 border-t border-gray-200">
             <div className="flex items-center space-x-2">
               <input
                 type="text"
@@ -143,7 +141,7 @@ export const ChatWidget: React.FC = () => {
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                 placeholder="Type your message..."
-                className="flex-1 px-4 py-2 bg-gray-100 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-500
+                className="flex-1 px-4 py-2 bg-gray-100 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-500"
               />
               <button
                 onClick={handleSendMessage}

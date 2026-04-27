@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { User, Room, Booking } from '../../types';
 import { api } from '../services/api';
-import { Card, StatCard, Badge, Button } from './ui.tsx';
+import { Card, StatCard, Badge, Button } from './ui';
 import { useToast } from '../../components/ToastProvider';
-import { PriceSuggestionTool } from './PriceSuggestionTool.tsx';
-import AiAgentChat  from './AiAgentChat.tsx';
+import { PriceSuggestionTool } from './PriceSuggestionTool';
+import AiAgentChat  from './AiAgentChat';
 import { Users, Home, CreditCard, CheckCircle, XCircle, Edit, Trash2, TrendingUp, Calendar, FileText } from 'lucide-react';
 
 export type AdminDashboardProps = { 
@@ -301,7 +301,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, rooms, boo
                                                                     </span>
                                                                 </td>
                                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                                                                    {new Date(warden.createdAt).toLocaleDateString()}
+                                                                    {new Date(warden.createdAt || Date.now()).toLocaleDateString()}
                                                                 </td>
                                                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                                     <button className="text-slate-400 hover:text-blue-600 transition-colors mr-3">
@@ -377,12 +377,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, rooms, boo
                                                                 </td>
                                                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                                     {status === 'paid' && !booking.checkInCompleted && (
-                                                                        <Button size="sm" onClick={() => handleCheckIn(booking.id)} className="bg-blue-600 hover:bg-blue-700 text-white">
+                                                                        <Button onClick={() => handleCheckIn(booking.id)} className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1">
                                                                             Check In
                                                                         </Button>
                                                                     )}
                                                                     {booking.checkInCompleted && !booking.checkOutCompleted && (
-                                                                        <Button size="sm" onClick={() => handleCheckOut(booking.id)} className="bg-orange-500 hover:bg-orange-600 text-white">
+                                                                        <Button onClick={() => handleCheckOut(booking.id)} className="bg-orange-500 hover:bg-orange-600 text-white text-xs px-3 py-1">
                                                                             Check Out
                                                                         </Button>
                                                                     )}

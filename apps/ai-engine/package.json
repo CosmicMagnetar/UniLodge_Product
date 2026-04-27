@@ -6,12 +6,12 @@
   "type": "module",
   "main": "dist/src/index.js",
   "scripts": {
-    "dev": "echo '[AI-ENGINE] Dev server ready'",
-    "build": "echo '[AI-ENGINE] Build OK'",
-    "start": "echo '[AI-ENGINE] Started'",
-    "lint": "echo '[AI-ENGINE] Lint OK'",
-    "test": "echo '[AI-ENGINE] Tests OK'",
-    "test:ui": "echo '[AI-ENGINE] UI Tests OK'"
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/src/index.js",
+    "lint": "eslint src/**/*.ts",
+    "test": "vitest run",
+    "test:ui": "vitest --coverage"
   },
   "dependencies": {
     "axios": "^1.6.0",

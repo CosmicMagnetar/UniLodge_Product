@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { User, Room, Role, Booking } from '../../types';
 import { api } from '../services/api';
-import { RoomCard } from './RoomCard.tsx';
-import { Card, Button, Input, Badge } from './ui.tsx';
-import AiAgentChat from './AiAgentChat.tsx';
+import { RoomCard } from './RoomCard';
+import { Card, Button, Input, Badge } from './ui';
+import AiAgentChat from './AiAgentChat';
 import { GridBackground } from '../../components/ui/GlowingCard';
 import { Search, Filter, MapPin, Calendar, X, CreditCard, CheckCircle, Clock, FileText, AlertCircle, Map, Utensils, User as UserIcon } from 'lucide-react';
 import { useToast } from '../../components/ToastProvider';
@@ -181,15 +181,15 @@ export const GuestDashboard: React.FC<GuestDashboardProps> = ({ user, rooms, onB
         }
         if (activeFilter !== 'All Rooms') {
             if (activeFilter === 'Single Room' && room.type !== 'Single') return false;
-            if (activeFilter === 'Furnished Options' && !room.furnished) return false;
-            if (activeFilter === 'Near Campus' && !room.nearCampus) return false;
+            if (activeFilter === 'Furnished Options' && !(room as any).furnished) return false;
+            if (activeFilter === 'Near Campus' && !(room as any).nearCampus) return false;
         }
         return true;
     }).sort((a, b) => {
         if (sortBy === 'price_asc') return a.price - b.price;
         if (sortBy === 'price_desc') return b.price - a.price;
-        if (sortBy === 'uni_asc') return a.university.localeCompare(b.university);
-        if (sortBy === 'uni_desc') return b.university.localeCompare(a.university);
+        if (sortBy === 'uni_asc') return (a.university || '').localeCompare(b.university || '');
+        if (sortBy === 'uni_desc') return (b.university || '').localeCompare(a.university || '');
         return 0;
     });
 

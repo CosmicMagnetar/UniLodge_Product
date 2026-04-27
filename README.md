@@ -1,477 +1,346 @@
-# UniLodge: AI-Powered Campus Accommodation Platform
+<p align="center">
+  <img src="docs/images/hero-banner.png" alt="UniLodge - Next-Generation Campus Accommodation Platform" width="100%"/>
+</p>
 
-<div align="center">
+<h1 align="center">UniLodge v2</h1>
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen.svg)]()
+<p align="center">
+  <strong>AI-Powered Campus Accommodation Management System</strong><br/>
+  Built with Clean Architecture · TypeScript Monorepo · Zod-Validated APIs · RAG-Enabled AI Engine
+</p>
 
-[BUILDING] Modern, Intelligent Housing Platform | [AI] AI-Powered Insights | [CHART] Real-time Analytics
-
-[Demo](https://unilodge.example.com) · [Documentation](./docs/README.md) · [API Docs](./docs/API_REFERENCE.md) · [Contributing](./CONTRIBUTING.md)
-
-</div>
+<p align="center">
+  <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript"/>
+  <img src="https://img.shields.io/badge/Next.js-14-000000?style=flat-square&logo=nextdotjs&logoColor=white" alt="Next.js"/>
+  <img src="https://img.shields.io/badge/Express-4.x-000000?style=flat-square&logo=express&logoColor=white" alt="Express"/>
+  <img src="https://img.shields.io/badge/Zod-Runtime_Validation-3E67B1?style=flat-square" alt="Zod"/>
+  <img src="https://img.shields.io/badge/Jest-Testing-C21325?style=flat-square&logo=jest&logoColor=white" alt="Jest"/>
+  <img src="https://img.shields.io/badge/Cypress-E2E-17202C?style=flat-square&logo=cypress&logoColor=white" alt="Cypress"/>
+</p>
 
 ---
 
-## [LIST] Table of Contents
+## 📖 Table of Contents
 
 - [Overview](#overview)
-- [Key Features](#key-features)
+- [System Architecture](#system-architecture)
+- [Design Patterns](#design-patterns)
+- [Monorepo Structure](#monorepo-structure)
 - [Tech Stack](#tech-stack)
-- [Architecture](#architecture)
-- [AI Capabilities](#ai-capabilities)
 - [Getting Started](#getting-started)
-- [Development](#development)
+- [Testing](#testing)
 - [API Reference](#api-reference)
 - [Contributing](#contributing)
-- [License](#license)
 
 ---
 
-## [TARGET] Overview
+## Overview
 
-**UniLodge** is a next-generation campus accommodation platform that leverages AI and machine learning to provide intelligent room recommendations, dynamic pricing, and intelligent customer support.
+UniLodge is a full-stack, production-grade campus accommodation platform that connects visiting interns, guest lecturers, and students with verified university housing. The platform features:
 
-Built with a modern microservices architecture, UniLodge demonstrates best practices in:
-- **Domain-Driven Design (DDD)** for proper separation of concerns
-- **Repository Pattern** for flexible data access
-- **Type-Safe TypeScript** with Zod validation
-- **Agentic AI Integration** using Hugging Face Inference API
-- **Real-time Analytics** with PostgreSQL and Vercel
-
-### Why UniLodge?
-
-- [CHECK] **AI-Powered**: Machine learning-driven price optimization and recommendations
-- [CHECK] **Type-Safe**: Full TypeScript with branded types for compile-time safety
-- [CHECK] **Scalable**: Microservices architecture supporting monorepo with Nx
-- [CHECK] **Secure**: Row-Level Security (RLS) and JWT authentication
-- [CHECK] **Developer-Friendly**: Clear domain structure and comprehensive documentation
+- **AI-Powered Room Matching** — RAG-based recommendation engine with contextual chat
+- **Dynamic Price Optimization** — ML-driven pricing suggestions with market analysis
+- **Role-Based Dashboards** — Tailored experiences for Guests, Wardens, and Administrators
+- **Digital Mess Cards** — QR-code based meal access system
+- **Real-Time Booking Management** — Complete check-in/check-out workflow with payment processing
 
 ---
 
-## [SPARKLE] Key Features
+## System Architecture
 
-### [GRADUATION] For Students & Guests
-- **Smart Room Discovery**: AI recommendations based on preferences and budget
-- **Real-time Availability**: Live occupancy and pricing data
-- **Instant Chat Support**: 24/7 AI-powered assistant
-- **Transparent Pricing**: No hidden fees, AI-suggested fair prices
-- **Reviews & Ratings**: Community-driven insights
+<p align="center">
+  <img src="docs/images/architecture-diagram.png" alt="UniLodge Platform Architecture" width="750"/>
+</p>
 
-### [OFFICE] For Property Managers
-- **Dynamic Pricing**: AI suggests optimal prices based on demand
-- **Occupancy Analytics**: Real-time insights into booking patterns
-- **Automated Notifications**: System alerts for important events
-- **Customer Management**: Centralized booking and messaging
-- **Revenue Optimization**: Data-driven pricing strategies
+The platform follows a **layered monorepo architecture** with strict dependency boundaries:
 
-### [LOCK] For Administrators
-- **Multi-role Access Control**: RBAC with RLS at database level
-- **Audit Trails**: Complete activity logging
-- **Bulk Management**: Tools for managing multiple properties
-- **Analytics Dashboard**: Comprehensive business intelligence
-- **Rate Limiting**: DDoS protection and fair usage policies
+```mermaid
+graph TD
+    subgraph Frontend ["🖥️ Frontend — Next.js 14"]
+        UI[React Components]
+        Hooks[Custom Hooks — SRP]
+        API_Facade[API Facade Layer]
+    end
+
+    subgraph Backend ["⚙️ Backend — Express.js"]
+        Routes[Express Routes + Zod Middleware]
+        Container[DI Container — Singleton]
+        
+        subgraph Domains ["📦 Domain Layer"]
+            Auth[Auth Domain Service]
+            Room[Room Domain Service]
+            Booking[Booking Domain Service]
+        end
+    end
+
+    subgraph AI ["🤖 AI Engine"]
+        AIService[AI Service — Orchestrator]
+        RAG[RAG Pipeline]
+        LLM[LLM Repository — OpenRouter]
+        Memory[Memory Repository — Vector Store]
+    end
+
+    subgraph Shared ["📋 Shared Package"]
+        Types[Zod Schemas + TypeScript Types]
+        Validators[Runtime Validators]
+    end
+
+    UI --> Hooks
+    Hooks --> API_Facade
+    API_Facade -->|HTTP/REST| Routes
+    
+    Routes --> Container
+    Container --> Domains
+    Container -->|Lazy Init| AIService
+    
+    AIService --> RAG
+    AIService --> LLM
+    AIService --> Memory
+
+    Domains -.->|imports| Types
+    Routes -.->|validates| Validators
+    UI -.->|imports| Types
+```
+
+### Data Flow
+
+1. **User Action** → React component triggers a custom hook
+2. **Hook** → Calls the API Facade (single HTTP client)
+3. **API Facade** → Sends validated request to Express route
+4. **Route Middleware** → Zod validates the request body
+5. **DI Container** → Resolves the appropriate domain service
+6. **Domain Service** → Executes business logic, returns result
+7. **Response** → Flows back through the same chain
 
 ---
 
-## [TOOLS] Tech Stack
+## Design Patterns
+
+<p align="center">
+  <img src="docs/images/design-patterns.png" alt="Design Patterns Used" width="700"/>
+</p>
+
+### Patterns in Detail
+
+| Pattern | Location | Purpose |
+|---------|----------|---------|
+| **Clean Architecture** | `apps/backend/src/domains/` | Isolates business logic from frameworks; domain services have zero knowledge of Express |
+| **Dependency Injection** | `apps/backend/src/container.ts` | Singleton DI container resolves all services; enables testing with mock implementations |
+| **Repository Pattern** | `apps/backend/src/domains/ai/repositories.ts` | Abstracts data access behind interfaces; swap Postgres for MongoDB without touching business logic |
+| **Façade Pattern** | `apps/frontend/lib/services/api.ts` | Single entry point for all HTTP calls; components never construct URLs or handle tokens directly |
+| **SRP via Hooks** | `apps/frontend/hooks/` | Each hook owns exactly one concern: `useAuth`, `useRooms`, `useBookings` |
+| **Adapter Pattern** | AI Engine LLM integration | Translates OpenRouter API responses into domain-specific types |
+| **Zod Validation** | `packages/shared/src/types.ts` | Runtime schema validation at API boundaries; types inferred from schemas for zero-drift |
+
+---
+
+## Monorepo Structure
+
+```
+unilodge-new/
+├── apps/
+│   ├── frontend/                  # Next.js 14 Application
+│   │   ├── app/                   # App Router (page.tsx entry point)
+│   │   ├── components/            # Reusable UI components
+│   │   │   ├── common/            # Badge, Footer, Icons, Layout, Modal
+│   │   │   ├── ui/                # Skeleton loaders, Toast, GlowingCard
+│   │   │   ├── chat/              # ChatWidget
+│   │   │   └── payment/           # PaymentModal
+│   │   ├── hooks/                 # Custom React hooks (SRP)
+│   │   │   ├── useAuth.ts         # Authentication state
+│   │   │   ├── useRooms.ts        # Room data management
+│   │   │   └── useBookings.ts     # Booking CRUD operations
+│   │   ├── lib/
+│   │   │   ├── pages/             # Page-level components
+│   │   │   │   ├── HomePage.tsx
+│   │   │   │   ├── LoginPage.tsx
+│   │   │   │   ├── GuestDashboard.tsx
+│   │   │   │   ├── WardenDashboard.tsx
+│   │   │   │   ├── AdminDashboard.tsx
+│   │   │   │   └── AiAgentChat.tsx
+│   │   │   └── services/          # API facade + AI services
+│   │   └── cypress/               # E2E test specs
+│   │
+│   └── backend/                   # Express.js API Server
+│       ├── src/
+│       │   ├── domains/           # Clean Architecture domain layer
+│       │   │   ├── auth/          # Authentication domain
+│       │   │   ├── property/      # Room/property domain
+│       │   │   ├── user/          # User management domain
+│       │   │   └── ai/            # AI engine domain
+│       │   │       ├── services/  # AIService orchestrator
+│       │   │       ├── repositories.ts  # Repository interfaces
+│       │   │       └── types.ts   # AI-specific branded types
+│       │   ├── routes/            # Express route handlers
+│       │   ├── middleware/        # Zod validation, rate limiting, logging
+│       │   ├── services/          # Service barrel exports
+│       │   └── container.ts       # DI container (singleton)
+│       └── __tests__/             # Jest unit tests
+│
+├── packages/
+│   └── shared/                    # Shared types & validators
+│       └── src/types.ts           # Zod schemas → TypeScript types
+│
+├── docs/images/                   # Architecture diagrams
+├── tsconfig.base.json             # Shared TypeScript configuration
+├── package.json                   # Root monorepo config
+└── report.md                      # System design analysis
+```
+
+---
+
+## Tech Stack
 
 ### Frontend
 | Technology | Purpose |
 |-----------|---------|
-| **Next.js 14** | React framework with server-side rendering |
-| **TypeScript 5.0** | Type-safe JavaScript development |
-| **Tailwind CSS** | Utility-first CSS framework |
-| **React Query** | Server state management |
-| **SWR** | Client-side data fetching |
+| **Next.js 14** | React framework with App Router |
+| **TypeScript 5** | Type-safe development |
+| **Framer Motion** | Animations and transitions |
+| **Lucide React** | Icon library |
+| **Zod** | Client-side form validation |
 
-### Backend & Database
+### Backend
 | Technology | Purpose |
 |-----------|---------|
-| **Node.js 18+** | JavaScript runtime |
-| **Supabase** | PostgreSQL database with built-in auth |
-| **PostgreSQL 15+** | Relational database |
-| **Deno Edge Functions** | Serverless compute |
-| **Row-Level Security** | Database-level access control |
+| **Express.js 4** | HTTP server framework |
+| **TypeScript 5** | Strict mode compilation |
+| **Zod** | Request body validation middleware |
+| **Custom DI Container** | Dependency injection |
 
-### AI & ML
+### AI Engine
 | Technology | Purpose |
 |-----------|---------|
-| **Hugging Face API** | LLM provider (inference) |
-| **zephyr-7b-beta** | Chat completions model |
-| **all-MiniLM-L6-v2** | Embedding model (768-dim) |
-| **Zod** | Runtime schema validation |
-| **Vector DB** | Similarity search for RAG |
+| **OpenRouter API** | LLM gateway (multi-model) |
+| **RAG Pipeline** | Retrieval-Augmented Generation |
+| **Vector Embeddings** | Semantic search for room matching |
 
-### DevOps & Deployment
+### Testing & Quality
 | Technology | Purpose |
 |-----------|---------|
-| **GitHub Actions** | CI/CD pipeline |
-| **Vercel** | Frontend deployment (Next.js) |
-| **Docker** | Containerization |
-| **npm Workspaces** | Monorepo management |
+| **Jest + ts-jest** | Backend unit testing |
+| **Cypress** | Frontend E2E testing |
+| **TypeScript Strict Mode** | Zero compiler errors enforced |
+| **ESLint** | Code quality linting |
 
 ---
 
-## [BUILDING] Architecture
-
-### System Architecture
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    Client (Browser)                          │
-│                  HTTPS/WebSocket                             │
-└────────────────────┬────────────────────────────────────────┘
-                     │
-        ┌────────────┴───────────┬──────────────────┐
-        │                        │                  │
-   ┌────▼─────┐          ┌────────▼──────┐    ┌───▼──────┐
-   │ Vercel   │          │  Supabase     │    │ Hugging  │
-   │ (Next.js)│          │  PostgreSQL   │    │ Face API │
-   │ Frontend │          │  + Auth       │    │  (LLM)   │
-   └────┬─────┘          └────────┬──────┘    └───┬──────┘
-        │                         │               │
-        └─────────────┬───────────┴───────────────┘
-                      │
-              ┌───────▼────────┐
-              │  REST API &    │
-              │  Server Actions│
-              └────────────────┘
-```
-
-### Domain Architecture (DDD)
-
-```
-src/
-├── domains/               # Bounded Contexts
-│   ├── property/         # Room management
-│   │   ├── types.ts
-│   │   ├── repositories.ts
-│   │   └── services/
-│   ├── user/             # User profiles & auth
-│   │   ├── types.ts
-│   │   ├── repositories.ts
-│   │   └── services/
-│   ├── booking/          # Booking management
-│   │   ├── types.ts
-│   │   ├── repositories.ts
-│   │   └── services/
-│   └── ai/               # AI services & ML
-│       ├── types.ts
-│       ├── repositories.ts
-│       └── services/
-│           └── ai.service.ts
-├── middleware/           # Cross-cutting concerns
-│   ├── auth.ts
-│   ├── validation.ts
-│   └── error-handling.ts
-├── shared/               # Shared utilities
-│   ├── utils/
-│   ├── constants/
-│   └── helpers/
-└── config/              # Configuration
-    ├── database.ts
-    ├── ai.ts
-    └── env.ts
-```
-
-### Data Flow: User Booking Journey
-
-```
-1. Discovery Phase
-   User → Frontend (Search)
-   → Backend (Filter Rooms)
-   → Database (Query)
-   → AI Engine (Recommend + Price)
-   ← Frontend (Display Results)
-
-2. Booking Phase
-   User → Frontend (Fill Form)
-   → Backend (Create Booking)
-   → Database (Insert & Validate)
-   → Notification (Send Confirmation)
-   ← Frontend (Success)
-
-3. Support Phase
-   User ↔ Frontend (Chat)
-   ↔ Backend (Forward Message)
-   ↔ AI Engine (Generate Response)
-   ↔ Memory DB (Store Context)
-```
-
----
-
-## [AI] AI Capabilities
-
-### 1. Intelligent Price Suggestion Engine
-
-**Use Case**: Auto-optimize room pricing based on market demand
-
-```typescript
-const suggestion = await aiService.suggestPrice(roomId);
-// Returns:
-{
-  suggestedPrice: 89.99,
-  confidence: 0.92,
-  reasoning: "Demand is HIGH, 85% occupancy, comparable rooms at $95",
-  factors: [
-    { name: "Occupancy", impact: "POSITIVE" },
-    { name: "Season", impact: "POSITIVE" },
-    { name: "Competition", impact: "NEGATIVE" }
-  ],
-  recommendedStrategy: "INCREASE",
-  priceRange: { min: 79.99, max: 99.99 }
-}
-```
-
-**How It Works**:
-1. Fetches room metadata (amenities, capacity, type)
-2. Analyzes nearby prices (competitive analysis)
-3. Reviews historical pricing trends
-4. Evaluates current occupancy rate
-5. Consults LLM for nuanced analysis
-6. Returns confidence score with reasoning
-
-**Benefits**:
-- [CHECK] Revenue optimization (+15-25% average increase)
-- [CHECK] Competitive positioning
-- [CHECK] Real-time adaptation to market changes
-- [CHECK] Reduced manual pricing decisions
-
-### 2. AI Chat Assistant
-
-**Use Case**: 24/7 customer support with context awareness
-
-```typescript
-const response = await aiService.processChat({
-  userId: "user-123",
-  content: "Are there any double rooms available for next week?",
-  role: "USER",
-  context: { roomType: "DOUBLE" }
-});
-```
-
-**Features**:
-- **Context Awareness**: RAG (Retrieval-Augmented Generation)
-- **Conversation Memory**: Multi-turn dialogue support
-- **Intent Recognition**: Understands booking, pricing, and general questions
-- **Real-time Data**: Access to live occupancy and pricing
-- **Multi-language**: Support for campus diverse populations
-
-### 3. Smart Room Recommendations
-
-**Use Case**: Personalized suggestions based on user preferences
-
-```typescript
-const recommendations = await aiService.recommendRooms(userId, {
-  budget: 100,
-  amenities: ["WiFi", "AC", "Desk"],
-  roomType: "SINGLE"
-});
-// Returns top 5 matching rooms ranked by relevance
-```
-
-### 4. RAG (Retrieval-Augmented Generation)
-
-**Purpose**: Provide contextually accurate responses using knowledge base
-
-**Flow**:
-```
-User Query
-   ↓
-Generate Embedding (768-dim)
-   ↓
-Vector Search (similarity > 0.7)
-   ↓
-Retrieve Top 5 Relevant Documents
-   ↓
-Inject into LLM Prompt as Context
-   ↓
-Generate More Accurate Response
-```
-
-### 5. Type-Safe Implementation
-
-```typescript
-// Brand types for compile-time safety
-type PricePrediction = number & { __brand: 'PricePrediction' };
-type ConfidenceScore = number & { __brand: 'ConfidenceScore' };
-
-const price = createPricePrediction(89.99);      // [CHECK] Type safe
-const confidence = createConfidenceScore(0.92);  // [CHECK] Validated
-```
-
----
-
-## [ROCKET] Getting Started
+## Getting Started
 
 ### Prerequisites
 
-```bash
-# Check versions
-node --version        # v18.0.0 or higher
-npm --version         # v9.0.0 or higher
-git --version         # v2.30.0 or higher
-```
+- **Node.js** ≥ 18.0
+- **npm** ≥ 9.0
 
-### Quick Start (5 minutes)
+### Installation
 
 ```bash
-# 1. Clone repository
-git clone https://github.com/CosmicMagnetar/UniLodge.git
-cd UniLodge
+# Clone the repository
+git clone https://github.com/your-org/unilodge-v2.git
+cd unilodge-v2
 
-# 2. Install dependencies
+# Install all workspace dependencies
 npm install
-
-# 3. Configure environment
-cp .env.example .env.local
-# Edit .env.local with your Supabase and Hugging Face keys
-
-# 4. Start development environment
-npm run dev
-
-# Frontend: http://localhost:3000
-# Backend API: http://localhost:3000/api
 ```
 
-### Environment Configuration
+### Environment Setup
 
-#### `.env.local`
+Create `.env` files in each application workspace:
 
+**`apps/backend/.env`**
 ```env
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGc...
-SUPABASE_ACCESS_TOKEN=sbp_xxxx...
-
-# AI Services
-HUGGING_FACE_API_KEY=hf_xxxx...
-HF_MODEL_CHAT=HuggingFaceH4/zephyr-7b-beta
-HF_MODEL_EMBEDDINGS=sentence-transformers/all-MiniLM-L6-v2
-
-# Feature Flags
-NEXT_PUBLIC_ENABLE_AI_CHAT=true
-NEXT_PUBLIC_ENABLE_PRICE_SUGGESTIONS=true
+PORT=5000
+NODE_ENV=development
+JWT_SECRET=your-jwt-secret
 ```
 
----
+**`apps/frontend/.env.local`**
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
+NEXT_PUBLIC_OPENROUTER_API_KEY=your-openrouter-key
+```
 
-## [COMPUTER] Development
-
-### Running Services
+### Running the Platform
 
 ```bash
-# Development mode (all services)
-npm run dev
+# Start the backend server
+cd apps/backend && npm run dev
 
-# Frontend only
-npm run dev:frontend
-
-# Run tests
-npm run test
-
-# Format code
-npm run format
-
-# Type check
-npm run type-check
+# Start the frontend (separate terminal)
+cd apps/frontend && npm run dev
 ```
 
-### Database Setup
+The frontend runs at `http://localhost:3000` and the backend API at `http://localhost:5000`.
+
+---
+
+## Testing
+
+### Backend Unit Tests (Jest)
 
 ```bash
-# Start local Supabase
-docker-compose up
-
-# Run migrations
-npm run db:migrate
-
-# Seed test data
-npm run db:seed
+cd apps/backend
+npm test
 ```
 
----
+**Current Coverage:**
+- `AuthService` — authentication, registration, token validation
+- All domain services compile with zero errors
 
-## [BOOKS] API Reference
-
-### Price Suggestions
+### Frontend E2E Tests (Cypress)
 
 ```bash
-POST /api/ai/price-suggestions
-{
-  "roomId": "550e8400-e29b-41d4-a716-446655440000"
-}
+cd apps/frontend
+npx cypress open
 ```
 
-### Chat API
-
-```bash
-POST /api/ai/chat
-{
-  "userId": "user-123",
-  "content": "Are there WiFi rooms available?"
-}
-```
-
-### Room Recommendations
-
-```bash
-POST /api/ai/recommendations
-{
-  "userId": "user-123",
-  "budget": 100,
-  "amenities": ["WiFi", "AC"]
-}
-```
-
-See [docs/API_REFERENCE.md](./docs/API_REFERENCE.md) for complete documentation.
+**Test Suites:**
+- Homepage load and navigation
+- Login modal interaction
 
 ---
 
-## [LOCK] Security
+## API Reference
 
-- JWT authentication with Supabase
-- Row-Level Security (RLS) at database level
-- Rate limiting per endpoint
-- Input validation with Zod
-- HTTPS/TLS encryption
-- GDPR-compliant data handling
+### Authentication
 
----
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/auth/login` | Authenticate user |
+| `POST` | `/api/auth/register` | Register new user |
+| `GET` | `/api/auth/me` | Get current user (requires Bearer token) |
 
-## 🤝 Contributing
+### Rooms
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/rooms` | List all rooms (with filters) |
+| `GET` | `/api/rooms/:id` | Get room by ID |
 
-```bash
-git checkout -b feature/your-feature
-git commit -m "feat: add your feature"
-git push origin feature/your-feature
-```
+### AI Engine
 
----
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/ai/health` | AI service health check |
+| `POST` | `/api/ai/chat` | Send chat message (RAG-enabled) |
+| `POST` | `/api/ai/price-suggestion` | Get AI price suggestion |
+| `POST` | `/api/ai/recommendations` | Get room recommendations |
+| `POST` | `/api/ai/analyze` | Analyze accommodation description |
 
-## 📄 License
-
-MIT License - see [LICENSE](./LICENSE) file for details.
-
----
-
-## 📞 Support
-
-- [EMAIL] Email: support@unilodge.com
-- [BOOK] Docs: [Documentation](./docs/README.md)
-- 🐛 Issues: [GitHub Issues](https://github.com/CosmicMagnetar/UniLodge/issues)
+All POST endpoints are validated with **Zod schemas** at the middleware layer.
 
 ---
 
-<div align="center">
+## Contributing
 
-Made with ❤️ by [Krishna](https://github.com/CosmicMagnetar)
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/my-feature`
+3. Ensure zero TypeScript errors: `npx tsc --noEmit`
+4. Run tests: `npm test`
+5. Submit a Pull Request
 
-[⬆ Back to Top](#unilodge-ai-powered-campus-accommodation-platform)
+---
 
-</div>
+<p align="center">
+  <sub>Built with ❤️ for campus communities worldwide</sub>
+</p>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Room } from '../../types';
-import { Icons } from './Icons.tsx';
-import { Button, Card } from './ui.tsx';
+import { Icons } from './Icons';
+import { Button, Card } from './ui';
 
 export const RoomCard: React.FC<{ room: Room; onBook: (roomId: string) => void }> = ({ room, onBook }) => (
     <Card className="flex flex-col group">

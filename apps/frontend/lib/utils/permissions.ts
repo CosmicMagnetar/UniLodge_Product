@@ -1,4 +1,4 @@
-import { Role } from '@/types';
+import { Role } from '../../types';
 
 /**
  * Permission utility functions for role-based access control

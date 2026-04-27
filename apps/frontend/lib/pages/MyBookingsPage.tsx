@@ -1,6 +1,6 @@
 import React from 'react';
 import { Booking } from '../../types';
-import { Card, Button, Badge } from './ui.tsx';
+import { Card, Button, Badge } from './ui';
 import { Calendar, CreditCard, Clock, MapPin, AlertCircle } from 'lucide-react';
 
 export type MyBookingsPageProps = { 

@@ -1,20 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Search, Heart, Home, Menu, X } from 'lucide-react';
-
-type Role = 'ADMIN' | 'WARDEN' | 'STUDENT';
-
-const Role = {
-  ADMIN: 'ADMIN' as Role,
-  WARDEN: 'WARDEN' as Role,
-  STUDENT: 'STUDENT' as Role
-};
-
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  role: Role;
-};
+import { User, Role } from '../../types';
 
 type HeaderProps = {
   user: User | null;

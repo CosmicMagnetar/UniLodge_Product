@@ -108,14 +108,14 @@ const AnimatedLoadingSkeleton = () => {
                 "0 0 35px rgba(59, 130, 246, 0.4)",
                 "0 0 20px rgba(59, 130, 246, 0.2)"
             ],
-            scale: [1, 1.1, 1], // Pulsating effect
+            scale: [1, 1.1, 1],
             transition: {
                 duration: 1,
                 repeat: Infinity,
-                ease: "easeInOut" // Smooth pulsation
+                ease: "easeInOut" as const,
             }
         }
-    }
+    };
 
     const config = getGridConfig(windowWidth) // Get current grid configuration
 

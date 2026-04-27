@@ -1,13 +1,20 @@
 /**
- * UniLodge AI Engine - Production Implementation
- * Handles AI-powered features: price suggestions, chat, recommendations
- * Integrates with OpenRouter for LLM capabilities
+ * UniLodge AI Engine — Public API
+ * 
+ * Design Patterns:
+ * - Façade: Provides a simplified interface to the complex domain AI service
+ * - Adapter: Wraps OpenRouter API behind a standardized interface
+ * - Factory: createAIService() builds the service with proper configuration
+ * 
+ * This module is the public API consumed by @unilodge/backend.
+ * It delegates to the domain layer's AIService for complex operations
+ * and provides a simpler interface for direct use.
  */
 
 import axios from 'axios';
 
 // ========================================
-// Types
+// Types (re-exported from domain layer)
 // ========================================
 
 export interface ChatMessage {
@@ -34,13 +41,17 @@ export interface RoomRecommendation {
 }
 
 // ========================================
-// OpenRouter API Client
+// OpenRouter API Client (Adapter Pattern)
 // ========================================
 
+/**
+ * Adapter: Wraps the OpenRouter REST API behind a clean internal interface.
+ * Principle: DIP — AIService depends on this abstraction, not on axios directly.
+ */
 class OpenRouterClient {
-  private apiKey: string;
-  private endpoint: string;
-  private model: string;
+  private readonly apiKey: string;
+  private readonly endpoint: string;
+  private readonly model: string;
 
   constructor() {
     this.apiKey = process.env.OPENROUTER_API_KEY || '';
@@ -54,7 +65,11 @@ class OpenRouterClient {
     }
   }
 
-  async chat(messages: any[]): Promise<string> {
+  get isConfigured(): boolean {
+    return !!this.apiKey;
+  }
+
+  async chat(messages: Array<{ role: string; content: string }>): Promise<string> {
     if (!this.apiKey) {
       throw new Error('OpenRouter API key not configured');
     }
@@ -86,21 +101,28 @@ class OpenRouterClient {
 }
 
 // ========================================
-// AI Service
+// AI Service (Façade Pattern)
 // ========================================
 
+/**
+ * AIService — Façade over the OpenRouter client.
+ * 
+ * Provides domain-specific methods (chat, price suggestion, recommendations)
+ * while hiding the complexity of prompt engineering and API communication.
+ * 
+ * SRP: This class is responsible ONLY for orchestrating AI operations.
+ * The OpenRouterClient handles HTTP communication separately.
+ */
 export class AIService {
-  private client: OpenRouterClient;
-  private enabled: boolean;
+  private readonly client: OpenRouterClient;
+  private readonly enabled: boolean;
 
-  constructor() {
-    this.client = new OpenRouterClient();
+  constructor(client: OpenRouterClient) {
+    this.client = client;
     this.enabled = process.env.AI_CHATBOT_ENABLED === 'true';
   }
 
-  /**
-   * Process chat message using OpenRouter LLM
-   */
+  /** Process chat message using OpenRouter LLM */
   async processChat(userMessage: string, context: string = ''): Promise<ChatMessage> {
     if (!this.enabled) {
       throw new Error('AI chatbot is disabled');
@@ -129,9 +151,7 @@ ${context ? `Context: ${context}` : ''}`;
     }
   }
 
-  /**
-   * Generate price suggestion using AI
-   */
+  /** Generate price suggestion using AI */
   async suggestPrice(roomData: any): Promise<PriceSuggestion> {
     const prompt = `Based on the following room details, suggest a nightly price range:
 Name: ${roomData.name}
@@ -147,7 +167,6 @@ Provide a JSON response with: suggested (number), min (number), max (number), co
         { role: 'user', content: prompt },
       ]);
 
-      // Parse JSON response
       const parsed = JSON.parse(response);
       return {
         suggested: parsed.suggested || 500,
@@ -157,7 +176,7 @@ Provide a JSON response with: suggested (number), min (number), max (number), co
         reasoning: parsed.reasoning || 'AI pricing analysis',
       };
     } catch (error) {
-      // Fallback to default pricing
+      // Fallback — Graceful degradation (Strategy Pattern)
       return {
         suggested: 500,
         min: 400,
@@ -168,9 +187,7 @@ Provide a JSON response with: suggested (number), min (number), max (number), co
     }
   }
 
-  /**
-   * Generate room recommendations
-   */
+  /** Generate room recommendations */
   async recommendRooms(
     userPreferences: any,
     availableRooms: any[]
@@ -199,12 +216,12 @@ Return JSON array with: id, name, matchScore (0-1), reason`;
       const parsed = JSON.parse(response);
       return Array.isArray(parsed) ? parsed : [];
     } catch (error) {
-      // Return simple score-based recommendations
+      // Fallback — score-based recommendations
       return availableRooms
         .map((room) => ({
           id: room.id,
           name: room.name,
-          matchScore: Math.random() * 0.3 + 0.7, // 70-100%
+          matchScore: Math.random() * 0.3 + 0.7,
           reason: 'Available accommodation',
           price: room.price,
         }))
@@ -213,9 +230,7 @@ Return JSON array with: id, name, matchScore (0-1), reason`;
     }
   }
 
-  /**
-   * Analyze apartment description using AI
-   */
+  /** Analyze apartment description using AI */
   async analyzeDescription(description: string): Promise<{
     sentiment: string;
     highlights: string[];
@@ -250,9 +265,7 @@ Return JSON with: sentiment, highlights (array), summary`;
     }
   }
 
-  /**
-   * Generate conversational response
-   */
+  /** Generate conversational response */
   async generateResponse(prompt: string): Promise<string> {
     try {
       return await this.client.chat([{ role: 'user', content: prompt }]);
@@ -261,52 +274,44 @@ Return JSON with: sentiment, highlights (array), summary`;
     }
   }
 
-  /**
-   * Check if AI service is healthy
-   */
+  /** Check if AI service is healthy */
   async healthCheck(): Promise<{ healthy: boolean; message: string }> {
     if (!this.enabled) {
-      return {
-        healthy: false,
-        message: 'AI chatbot is disabled',
-      };
+      return { healthy: false, message: 'AI chatbot is disabled' };
     }
 
-    if (!process.env.OPENROUTER_API_KEY) {
-      return {
-        healthy: false,
-        message: 'OpenRouter API key not configured',
-      };
+    if (!this.client.isConfigured) {
+      return { healthy: false, message: 'OpenRouter API key not configured' };
     }
 
-    return {
-      healthy: true,
-      message: 'AI service is ready',
-    };
+    return { healthy: true, message: 'AI service is ready' };
   }
 }
 
 // ========================================
-// Exports
+// Factory Function (Factory Pattern)
 // ========================================
 
+/**
+ * Factory: Creates AIService with its OpenRouterClient dependency.
+ * This is the public API consumed by @unilodge/backend routes.
+ */
 export const createAIService = (): AIService => {
-  return new AIService();
+  const client = new OpenRouterClient();
+  return new AIService(client);
 };
 
-// Initialize and log
+// Module-level singleton (implicit Singleton via module cache)
 const aiService = createAIService();
-const health = aiService.healthCheck();
-health
+
+// Log initialization status
+aiService.healthCheck()
   .then((status) => {
     console.log(
       `[AI-ENGINE] Service Status: ${status.healthy ? '✓ Ready' : '✗ Disabled'}`
     );
     console.log(
       `[AI-ENGINE] Model: ${process.env.OPENROUTER_MODEL || 'openai/gpt-3.5-turbo'}`
-    );
-    console.log(
-      `[AI-ENGINE] Features: Chat, Price Suggestions, Room Recommendations, Analysis`
     );
   })
   .catch((err) => {

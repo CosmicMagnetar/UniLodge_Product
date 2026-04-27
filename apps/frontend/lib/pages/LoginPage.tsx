@@ -1,6 +1,6 @@
 import React, { useState, FormEvent } from 'react';
 import { Building2 } from 'lucide-react';
-import { Button, Input, Card, DotPattern } from './ui.tsx';
+import { Button, Input, Card, DotPattern } from './ui';
 
 export type LoginPageProps = { 
     onLogin: (email: string, password: string) => Promise<void>; 

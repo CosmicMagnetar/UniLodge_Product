@@ -26,7 +26,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
       // Simulate processing delay
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      await api.processPayment(booking.id, paymentMethod);
+      await api.payBooking(booking.id, paymentMethod);
       setSuccess(true);
       
       setTimeout(() => {

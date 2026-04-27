@@ -4,19 +4,8 @@ import { ChatSession } from "@google/generative-ai";
 // --- Import the REAL service ---
 import { createAiChat } from "../services/geminiService"; // <-- CORRECT IMPORT
 
-// --- Import types ---
-export enum Role {
-  ADMIN = "ADMIN",
-  WARDEN = "WARDEN",
-  GUEST = "GUEST",
-}
-
-export interface ChatMessage {
-  id: string;
-  sender: "ai" | "user";
-  text: string;
-  isLoading: boolean;
-}
+// --- Import types from shared (DRY: single source of truth) ---
+import { Role, type ChatMessage } from '../../types';
 
 // --- Import UI components (assuming they are in separate files) ---
 // Make sure these paths are correct for your project
@@ -90,7 +79,7 @@ Be welcoming, clear, and helpful. Guide users through the booking process and an
 
     // This now calls the REAL service from ../services/geminiService
     const chatInstance = createAiChat(systemInstruction);
-    setChat(chatInstance);
+    setChat(chatInstance as any);
 
     let initialMessage = '';
     if (userRole === Role.ADMIN) {

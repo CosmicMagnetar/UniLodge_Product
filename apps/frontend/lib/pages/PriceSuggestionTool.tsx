@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Room, PriceSuggestion } from "../../types";
 import { getPriceSuggestion } from "../services/geminiService";
-import { Button, Input, Card } from "./ui.tsx";
+import { Button, Input, Card } from "./ui";
 
 export const PriceSuggestionTool: React.FC<{}> = () => {
   const [roomDetails, setRoomDetails] = useState<Partial<Room>>({
