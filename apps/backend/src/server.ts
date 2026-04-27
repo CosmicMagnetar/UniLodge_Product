@@ -3,17 +3,17 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 
 // Import Routes
-import aiRouter from './routes/ai';
-import authRouter from './routes/auth';
-import roomRouter from './routes/rooms';
-import bookingRouter from './routes/bookings';
-import requestRouter from './routes/booking-requests';
+import aiRouter from './routes/ai.js';
+import authRouter from './routes/auth.js';
+import roomRouter from './routes/rooms.js';
+import bookingRouter from './routes/bookings.js';
+import requestRouter from './routes/booking-requests.js';
 
 // Import Database Configuration
-import connectDB from './config/db';
+import connectDB from './config/db.js';
 
 // Import Middleware
-import { requestLogger, rateLimitMiddleware, errorHandler } from './middleware';
+import { requestLogger, rateLimitMiddleware, errorHandler } from './middleware/index.js';
 
 // Load environment variables
 dotenv.config();

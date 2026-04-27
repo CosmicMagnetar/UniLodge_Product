@@ -1,12 +1,12 @@
-import { Property, PropertyDomainService } from '../domains/property/property.domain';
-import { User as DomainUser, AuthDomainService, LoginRequest, RegisterRequest, AuthResponse } from '../domains/auth/auth.domain';
-import { UserProfile, UserDomainService } from '../domains/user/user.domain';
+import { Property, PropertyDomainService } from '../domains/property/property.domain.js';
+import { User as DomainUser, AuthDomainService, LoginRequest, RegisterRequest, AuthResponse } from '../domains/auth/auth.domain.js';
+import { UserProfile, UserDomainService } from '../domains/user/user.domain.js';
 import jwt from 'jsonwebtoken';
 
 // Mongoose Models
-import User from '../models/User';
-import Room from '../models/Room';
-import Booking from '../models/Booking';
+import User from '../models/User.js';
+import Room from '../models/Room.js';
+import Booking from '../models/Booking.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret';
 

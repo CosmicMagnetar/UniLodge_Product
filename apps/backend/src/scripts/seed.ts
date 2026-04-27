@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import Room from '../models/Room';
-import User from '../models/User';
-import Booking from '../models/Booking';
+import Room from '../models/Room.js';
+import User from '../models/User.js';
+import Booking from '../models/Booking.js';
 
 dotenv.config();
 
@@ -260,8 +260,8 @@ const seed = async (): Promise<void> => {
       // Check if bookings already exist
       const existingBookings = await Booking.countDocuments();
       if (existingBookings > 0) {
-         console.log(`⚠️  Found ${existingBookings} existing bookings. Clearing...`);
-         await Booking.deleteMany({});
+        console.log(`⚠️  Found ${existingBookings} existing bookings. Clearing...`);
+        await Booking.deleteMany({});
       }
 
       const booking1 = new Booking({

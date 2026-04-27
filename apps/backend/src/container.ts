@@ -13,8 +13,8 @@ import {
   IAIMemoryRepository,
   IHuggingFaceLLMRepository,
   INotificationRepository,
-} from './domains/ai/repositories';
-import { AIService, createAIService } from './domains/ai/services/ai.service';
+} from './domains/ai/repositories.js';
+import { AIService, createAIService } from './domains/ai/services/ai.service.js';
 
 // ============================================================
 // Concrete Repository Implementations

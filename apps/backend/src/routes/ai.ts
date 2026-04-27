@@ -1,7 +1,7 @@
 import express, { Router, Request, Response } from 'express';
 import { z } from 'zod';
-import { validateRequest } from '../middleware/validate';
-import { Container } from '../container';
+import { validateRequest } from '../middleware/validate.js';
+import { Container } from '../container.js';
 
 const aiRouter: Router = express.Router();
 

@@ -1,4 +1,4 @@
-import { RoomMetadata } from './types';
+import { RoomMetadata } from './types.js';
 
 /**
  * PropertyRepository Interface

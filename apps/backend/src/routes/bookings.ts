@@ -1,8 +1,8 @@
 import express, { Router, Request, Response } from 'express';
 import { z } from 'zod';
-import { validateRequest } from '../middleware/validate';
-import { BookingService } from '../services';
-import { requireAuth } from './auth';
+import { validateRequest } from '../middleware/validate.js';
+import { BookingService } from '../services/index.js';
+import { requireAuth } from './auth.js';
 
 const bookingRouter: Router = express.Router();
 const bookingService = new BookingService();

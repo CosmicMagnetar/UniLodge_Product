@@ -9,13 +9,13 @@ import {
     createConfidenceScore,
     createChatMessageId,
     RoomRecommendation,
-} from '../types';
+} from '../types.js';
 import {
     IPropertyRepository,
     IAIMemoryRepository,
     IHuggingFaceLLMRepository,
     INotificationRepository,
-} from '../repositories';
+} from '../repositories.js';
 
 /**
  * AIService - Production-ready AI Engine for UniLodge

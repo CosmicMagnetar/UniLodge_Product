@@ -1,7 +1,7 @@
 import express, { Router, Request, Response } from 'express';
 import { z } from 'zod';
-import { validateRequest } from '../middleware/validate';
-import { AuthService } from '../services';
+import { validateRequest } from '../middleware/validate.js';
+import { AuthService } from '../services/index.js';
 
 const authRouter: Router = express.Router();
 const authService = new AuthService();

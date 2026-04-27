@@ -1,10 +1,10 @@
 import express, { Router, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import { z } from 'zod';
-import { validateRequest } from '../middleware/validate';
-import BookingRequest from '../models/BookingRequest';
-import Room from '../models/Room';
-import { requireAuth, requireRole } from './auth';
+import { validateRequest } from '../middleware/validate.js';
+import BookingRequest from '../models/BookingRequest.js';
+import Room from '../models/Room.js';
+import { requireAuth, requireRole } from './auth.js';
 
 const requestRouter: Router = express.Router();
 
