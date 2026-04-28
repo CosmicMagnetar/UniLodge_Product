@@ -2,6 +2,8 @@
 
 This directory is the single source of truth for all technical documentation covering architecture, API contracts, developer setup, and system diagrams for the UniLodge v2 platform.
 
+**Project Report:** [View on Google Drive](https://drive.google.com/drive/u/0/folders/1054_yx0t-ES0RP2WmmqvQ0GdXnWwRP5E)
+
 ---
 
 ## Table of Contents
